@@ -70,4 +70,14 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             @Param("storeId") Long storeId,
             @Param("start")   LocalDateTime start,
             @Param("end")     LocalDateTime end);
+
+    @Query("""
+        SELECT COUNT(s) FROM Sale s
+        WHERE s.store.id = :storeId
+        AND s.soldAt BETWEEN :start AND :end
+        """)
+    long countByStoreAndDateRange(
+            @Param("storeId") Long storeId,
+            @Param("start")   LocalDateTime start,
+            @Param("end")     LocalDateTime end);
 }

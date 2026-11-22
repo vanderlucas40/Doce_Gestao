@@ -22,9 +22,7 @@ export function PDV() {
   const [modal,        setModal]        = useState(null)
   const [successModal, setSuccessModal] = useState(null)
   const [submitting,   setSubmitting]   = useState(false)
-  const [activeCategory, setActiveCategory] = useState('Tudo')
 
-  const CATEGORIES = ['Tudo', 'Bolos', 'Doces', 'Salgados']
 
   // ── Carrinho (regras puras em utils/cart.js) ──────────────────
   const addToCart = useCallback((item, qty = 1) => {
@@ -77,25 +75,6 @@ export function PDV() {
 
         {/* ── Esquerda: Grid de produtos ─────────────────────── */}
         <div className="lg:col-span-8 space-y-6">
-
-          {/* Categorias */}
-          <div>
-            <span className="text-[10px] text-on-surface-variant tracking-[0.1em] font-bold uppercase">
-              Categorias
-            </span>
-            <div className="flex gap-3 mt-2 overflow-x-auto pb-1">
-              {CATEGORIES.map(cat => (
-                <button key={cat} onClick={() => setActiveCategory(cat)}
-                  className={`px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
-                    activeCategory === cat
-                      ? 'bg-gradient-to-br from-primary to-primary-container text-white shadow-sm'
-                      : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'
-                  }`}>
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Grid de produtos */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-5">

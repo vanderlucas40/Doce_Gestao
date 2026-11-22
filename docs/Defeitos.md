@@ -16,6 +16,7 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 | DEF-10 | — | RF01, RF02, RF04 | Alta | Corrigido |
 | DEF-11 | — | RF09, RN06 | Baixa | Corrigido |
 | DEF-12 | R09 | RNF06, RNF07 | Média | Corrigido |
+| DEF-13 | — | RF11 | Média | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -125,6 +126,16 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 - **Correção:** `testcontainers.version` fixado em 1.21.4 no `pom.xml`; o CI passa a falhar se qualquer teste for ignorado; actions atualizadas para v5.
 - **Commit:** `fix(ci): testes de integração rodam no Docker 29`
 - **Verificação:** execução do CI com `Tests run: 59, Skipped: 0`.
+
+## DEF-13 — Dashboard exibia variações inventadas
+
+- **Sintoma:** os cartões “Receita Total” e “Vendas Concluídas” mostravam sempre “+12%” e “+5%” com seta para cima, qualquer que fosse o movimento da loja.
+- **Causa:** valores escritos à mão no `Dashboard.jsx`, herdados do protótipo visual.
+- **Correção:** `GET /stores/{id}/dashboard` passa a trazer `totalYesterday` e `salesCountYesterday`; a tela calcula a variação real (`utils/trend.js`), mostra seta e cor de queda quando cai, e não mostra percentual quando ontem não teve movimento.
+- **Commit:** `fix(dashboard): variação real contra ontem; remove categorias falsas do PDV`
+- **Testes:** CT-VEN-07, CT-VEN-08 (backend), CT-FE-18, CT-FE-19 (frontend).
+
+**Na mesma entrega:** os botões de categoria do PDV (Tudo, Bolos, Doces, Salgados) foram removidos: os produtos não têm categoria e o filtro não fazia nada. Categoria de produto fica registrada como evolução futura.
 
 ## Melhorias sem defeito funcional (Step 10)
 

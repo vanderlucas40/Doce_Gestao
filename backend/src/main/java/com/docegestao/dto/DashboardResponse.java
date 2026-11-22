@@ -15,6 +15,9 @@ public class DashboardResponse {
     public String storeName;
     public BigDecimal totalToday;
     public Long salesCountToday;
+    /** Base da variação exibida no painel (RF11): mesmos indicadores do dia anterior */
+    public BigDecimal totalYesterday;
+    public Long salesCountYesterday;
     public List<InventoryResponse> lowStockProducts;
     public List<IngredientStockResponse> lowStockIngredients;
     public List<SaleResponse> recentSales;

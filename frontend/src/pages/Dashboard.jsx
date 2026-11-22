@@ -2,6 +2,7 @@ import { useStore }                                    from '../hooks/useStore'
 import { useFetch }                                    from '../hooks/useFetch'
 import { salesApi }                                    from '../api'
 import { Icon, Card, fmtBRL, fmtTime }                from '../components/ui'
+import { variation }                                   from '../utils/trend'
 
 export function Dashboard() {
   const { currentStore } = useStore()
@@ -17,12 +18,17 @@ export function Dashboard() {
   const {
     totalToday       = 0,
     salesCountToday  = 0,
+    totalYesterday      = 0,
+    salesCountYesterday = 0,
     lowStockProducts    = [],
     lowStockIngredients = [],
     recentSales      = [],
   } = data || {}
 
   const alertCount = lowStockProducts.length + lowStockIngredients.length
+  // Variação real contra ontem (antes eram "+12%" e "+5%" fixos no código)
+  const revenueTrend = variation(totalToday, totalYesterday)
+  const salesTrend   = variation(salesCountToday, salesCountYesterday)
   const topProducts = buildTopProducts(recentSales).slice(0, 2)
 
   return (
@@ -45,8 +51,8 @@ export function Dashboard() {
 
       {/* ── Bento de métricas ──────────────────────────────── */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <MetricCard icon="payments"      label="Receita Total"      value={fmtBRL(totalToday)}                          trend="+12%" trendUp />
-        <MetricCard icon="shopping_bag"  label="Vendas Concluídas"  value={`${salesCountToday} Pedidos`}               trend="+5%"  trendUp />
+        <MetricCard icon="payments"      label="Receita Total"      value={fmtBRL(totalToday)}                          trend={revenueTrend?.label} trendUp={revenueTrend?.up} />
+        <MetricCard icon="shopping_bag"  label="Vendas Concluídas"  value={`${salesCountToday} Pedidos`}               trend={salesTrend?.label}   trendUp={salesTrend?.up} />
         <MetricCard icon="warning"       label="Alertas de Estoque" value={`${alertCount} ${alertCount === 1 ? 'Item' : 'Itens'}`} urgent={alertCount > 0} />
       </section>
 
@@ -142,7 +148,7 @@ function MetricCard({ icon, label, value, trend, trendUp, urgent }) {
           <Icon name={icon} fill className={urgent ? 'text-error' : 'text-primary'} />
         </span>
         {trend && !urgent && (
-          <span className="text-secondary font-bold text-sm flex items-center gap-1">
+          <span title="Comparado a ontem" className={`${trendUp ? 'text-secondary' : 'text-error'} font-bold text-sm flex items-center gap-1`}>
             {trend} <Icon name={trendUp ? 'trending_up' : 'trending_down'} className="text-base" />
           </span>
         )}

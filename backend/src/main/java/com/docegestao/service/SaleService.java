@@ -104,12 +104,19 @@ public class SaleService {
         var todaySales     = saleRepository.findByStoreAndDateRange(storeId, start, end);
         var lowProducts    = inventoryService.findLowStock(storeId);
         var lowIngredients = ingredientStockService.findLowStock(storeId);
+        var yesterday      = today.minusDays(1);
+        var totalYesterday = saleRepository.sumTotalByStoreAndDateRange(
+                storeId, yesterday.atStartOfDay(), yesterday.atTime(LocalTime.MAX));
+        var countYesterday = saleRepository.countByStoreAndDateRange(
+                storeId, yesterday.atStartOfDay(), yesterday.atTime(LocalTime.MAX));
 
         var dashboard = new DashboardResponse();
         dashboard.setStoreId(store.getId());
         dashboard.setStoreName(store.getName());
         dashboard.setTotalToday(totalToday != null ? totalToday : BigDecimal.ZERO);
         dashboard.setSalesCountToday((long) todaySales.size());
+        dashboard.setTotalYesterday(totalYesterday != null ? totalYesterday : BigDecimal.ZERO);
+        dashboard.setSalesCountYesterday(countYesterday);
         dashboard.setLowStockProducts(lowProducts);
         dashboard.setLowStockIngredients(lowIngredients);
         dashboard.setRecentSales(todaySales.stream().limit(10).map(SaleResponse::from).toList());

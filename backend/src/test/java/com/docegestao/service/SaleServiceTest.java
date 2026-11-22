@@ -140,10 +140,14 @@ class SaleServiceTest {
     }
 
     @Test
-    @DisplayName("CT-VEN-07: painel do dia soma faturamento, conta vendas e limita a 10 os últimos pedidos (RF11)")
+    @DisplayName("CT-VEN-07: painel do dia soma faturamento, conta vendas, traz o dia anterior e limita a 10 os últimos pedidos (RF11)")
     void dashboardDoDia() {
+        var hoje  = java.time.LocalDate.now().atStartOfDay();
+        var ontem = hoje.minusDays(1);
         when(storeService.getOrThrow(1L)).thenReturn(loja);
-        when(saleRepository.sumTotalByStoreAndDateRange(eq(1L), any(), any())).thenReturn(new BigDecimal("540.00"));
+        when(saleRepository.sumTotalByStoreAndDateRange(eq(1L), eq(hoje), any())).thenReturn(new BigDecimal("540.00"));
+        when(saleRepository.sumTotalByStoreAndDateRange(eq(1L), eq(ontem), any())).thenReturn(new BigDecimal("450.00"));
+        when(saleRepository.countByStoreAndDateRange(eq(1L), eq(ontem), any())).thenReturn(9L);
         var vendas = new ArrayList<Sale>();
         for (int i = 0; i < 12; i++) vendas.add(sale(loja, "45.00"));
         when(saleRepository.findByStoreAndDateRange(eq(1L), any(), any())).thenReturn(vendas);
@@ -156,10 +160,12 @@ class SaleServiceTest {
         assertThat(d.getSalesCountToday()).isEqualTo(12L);
         assertThat(d.getRecentSales()).hasSize(10);
         assertThat(d.getStoreName()).isEqualTo("Loja Centro");
+        assertThat(d.getTotalYesterday()).isEqualByComparingTo("450.00");
+        assertThat(d.getSalesCountYesterday()).isEqualTo(9L);
     }
 
     @Test
-    @DisplayName("CT-VEN-08: painel sem vendas mostra faturamento zero")
+    @DisplayName("CT-VEN-08: painel sem vendas hoje nem ontem mostra zero nos dois dias")
     void dashboardSemVendas() {
         when(storeService.getOrThrow(1L)).thenReturn(loja);
         when(saleRepository.sumTotalByStoreAndDateRange(eq(1L), any(), any())).thenReturn(null);
@@ -172,6 +178,8 @@ class SaleServiceTest {
         assertThat(d.getTotalToday()).isEqualByComparingTo(BigDecimal.ZERO);
         assertThat(d.getSalesCountToday()).isZero();
         assertThat(d.getRecentSales()).isEmpty();
+        assertThat(d.getTotalYesterday()).isEqualByComparingTo(BigDecimal.ZERO);
+        assertThat(d.getSalesCountYesterday()).isZero();
     }
 
     // ─── helpers ─────────────────────────────────────────────
