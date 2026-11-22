@@ -100,3 +100,9 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 - **Commit:** `fix(estoque): bloqueio otimista`
 - **Testes:** CT-EST-01 e CT-EST-02 (versão desatualizada recusada); CT-EST-03 (8 vendas simultâneas, 3 em estoque: saldo final = 3 − vendas gravadas, nunca negativo).
 
+## Melhorias sem defeito funcional (Step 10)
+
+- **R10 — motivo do ajuste:** a tela Estoque pedia o motivo, mas ele era descartado. Migração `V4__stock_movements_and_indexes.sql` cria `stock_movements` (saldo anterior e novo, motivo, autor, data); os ajustes manuais de produto e insumo gravam uma linha quando a quantidade muda. Consulta paginada em `GET /stores/{id}/stock-movements` (isolada por loja). Testes CT-EST-04 e CT-EST-05.
+- **R06 — paginação:** `GET /stores/{id}/sales` passa a ser paginado no banco (`page`, `size` ≤ 100; resposta `{content, page, size, totalElements, totalPages}`), em duas etapas para não paginar em memória com `JOIN FETCH`. O PDV usa `/sales/by-date` com a data de hoje em vez de baixar todas as vendas. Testes CT-VEN-15 e CT-VEN-16.
+- **Índices:** `sales (store_id, sold_at)` e `production_batches (store_id, produced_at)`, recomendados no Modelo de Dados para relatórios e histórico.
+

@@ -13,7 +13,8 @@ export function PDV() {
     useFetch(() => inventoryApi.listByStore(storeId), [storeId])
 
   const { data: sales, refetch: refetchSales } =
-    useFetch(() => salesApi.list(storeId), [storeId])
+    // Só as vendas de hoje, filtradas no servidor (antes baixava todas e filtrava no navegador — R06)
+    useFetch(() => salesApi.byDate(storeId, todayISO()), [storeId])
 
   const [cart,         setCart]         = useState([])
   const [modal,        setModal]        = useState(null)
@@ -86,7 +87,6 @@ export function PDV() {
   }
 
   const todaySales = (sales || [])
-    .filter(s => new Date(s.soldAt).toDateString() === new Date().toDateString())
     .slice(0, 5)
     .reverse()
 
@@ -391,4 +391,10 @@ function PageState({ spinner, icon, msg, action, actionLabel }) {
       </div>
     </div>
   )
+}
+
+/** Data local (não UTC) no formato aaaa-mm-dd, como o backend espera em /sales/by-date */
+function todayISO() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }

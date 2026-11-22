@@ -4,6 +4,7 @@ import com.docegestao.dto.*;
 import com.docegestao.security.StoreAccessGuard;
 import com.docegestao.service.IngredientStockService;
 import com.docegestao.service.InventoryService;
+import com.docegestao.service.StockMovementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -69,3 +70,23 @@ class IngredientStockController {
         return ingredientStockService.upsert(storeId, ingredientId, req);
     }
 }
+
+@RestController
+@RequestMapping("/stores/{storeId}/stock-movements")
+@RequiredArgsConstructor
+class StockMovementController {
+
+    private final StockMovementService movementService;
+    private final StoreAccessGuard     guard;
+
+    /** Histórico de ajustes manuais da loja (motivo, autor, saldo anterior e novo), paginado */
+    @GetMapping
+    public PageResponse<StockMovementResponse> findByStore(
+            @PathVariable Long storeId,
+            @RequestParam(defaultValue = "0")  int page,
+            @RequestParam(defaultValue = "20") int size) {
+        guard.check(storeId);
+        return movementService.findByStore(storeId, page, size);
+    }
+}
+

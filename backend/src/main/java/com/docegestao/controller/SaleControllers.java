@@ -1,6 +1,7 @@
 package com.docegestao.controller;
 
 import com.docegestao.dto.DashboardResponse;
+import com.docegestao.dto.PageResponse;
 import com.docegestao.dto.SaleRequest;
 import com.docegestao.dto.SaleResponse;
 import com.docegestao.security.StoreAccessGuard;
@@ -26,11 +27,14 @@ class SaleController {
     private final SaleService      saleService;
     private final StoreAccessGuard guard;
 
-    /** Lista todas as vendas da loja (sem paginação — uso interno/dashboard) */
+    /** Vendas da loja paginadas, mais recentes primeiro (size máx. 100) */
     @GetMapping
-    public List<SaleResponse> findByStore(@PathVariable Long storeId) {
+    public PageResponse<SaleResponse> findByStore(
+            @PathVariable Long storeId,
+            @RequestParam(defaultValue = "0")  int page,
+            @RequestParam(defaultValue = "20") int size) {
         guard.check(storeId);
-        return saleService.findByStore(storeId);
+        return saleService.findByStore(storeId, page, size);
     }
 
     /** Vendas de um dia específico (usado pelo Dashboard) */

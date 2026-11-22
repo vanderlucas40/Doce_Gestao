@@ -15,4 +15,8 @@ public class InventoryUpdateRequest {
     public Integer quantity;
     @Min(0)
     public Integer maxQuantity;
+
+    /** Motivo do ajuste manual (ex.: Avaria / Perda), gravado em stock_movements */
+    @Size(max = 255)
+    public String reason;
 }

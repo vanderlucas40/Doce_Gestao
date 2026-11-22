@@ -3,11 +3,13 @@ package com.docegestao.service;
 import com.docegestao.dto.DashboardResponse;
 import com.docegestao.dto.SaleRequest;
 import com.docegestao.dto.SaleResponse;
+import com.docegestao.dto.PageResponse;
 import com.docegestao.entity.Sale;
 import com.docegestao.entity.SaleItem;
 import com.docegestao.repository.SaleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -25,10 +27,20 @@ public class SaleService {
     private final InventoryService     inventoryService;
     private final IngredientStockService ingredientStockService;
 
-    public List<SaleResponse> findByStore(Long storeId) {
+    public static final int MAX_PAGE_SIZE = 100;
+
+    /** Vendas da loja, mais recentes primeiro, paginadas no banco (R06). */
+    @Transactional(readOnly = true)
+    public PageResponse<SaleResponse> findByStore(Long storeId, int page, int size) {
         storeService.getOrThrow(storeId);
-        return saleRepository.findByStoreIdOrderBySoldAtDesc(storeId)
-                .stream().map(SaleResponse::from).toList();
+        var pageable = PageRequest.of(Math.max(page, 0), Math.min(Math.max(size, 1), MAX_PAGE_SIZE));
+        var ids = saleRepository.findIdsByStoreId(storeId, pageable);
+        if (ids.isEmpty()) return PageResponse.of(List.of(), ids);
+
+        var byId = saleRepository.findWithItemsByIdIn(ids.getContent()).stream()
+                .collect(java.util.stream.Collectors.toMap(Sale::getId, v -> v));
+        var content = ids.getContent().stream().map(byId::get).map(SaleResponse::from).toList();
+        return PageResponse.of(content, ids);
     }
 
     public List<SaleResponse> findByStoreAndDate(Long storeId, LocalDate date) {

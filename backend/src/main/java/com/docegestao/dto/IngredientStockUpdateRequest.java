@@ -13,4 +13,8 @@ import java.util.List;
 public class IngredientStockUpdateRequest {
     @NotNull @DecimalMin("0")
     public BigDecimal quantity;
+
+    /** Motivo do ajuste manual (ex.: Avaria / Perda), gravado em stock_movements */
+    @Size(max = 255)
+    public String reason;
 }

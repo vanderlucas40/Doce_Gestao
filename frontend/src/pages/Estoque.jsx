@@ -4,6 +4,8 @@ import { useFetch }                                          from '../hooks/useF
 import { inventoryApi }                                      from '../api'
 import { Icon, Modal, Toast, StatusBadge, StockBar, useToast, fmtBRL } from '../components/ui'
 
+const REASONS = ['Entrada de Produção', 'Venda Manual', 'Avaria / Perda', 'Inventário Periódico']
+
 export function Estoque() {
   const { currentStore }           = useStore()
   const storeId                    = currentStore?.id
@@ -14,6 +16,7 @@ export function Estoque() {
   const [editItem, setEditItem] = useState(null)
   const [editQty,  setEditQty]  = useState('')
   const [editMax,  setEditMax]  = useState('')
+  const [editReason, setEditReason] = useState(REASONS[0])
   const [submitting, setSubmitting] = useState(false)
 
   const { data: inventory,   loading: l1, refetch: r1 } = useFetch(() => inventoryApi.listByStore(storeId),   [storeId])
@@ -23,6 +26,7 @@ export function Estoque() {
     setEditItem({ ...item, _type: type })
     setEditQty(String(type === 'product' ? item.quantity : Number(item.quantity).toFixed(1)))
     setEditMax(String(item.maxQuantity || ''))
+    setEditReason(REASONS[0])
   }
 
   async function handleSave() {
@@ -30,11 +34,12 @@ export function Estoque() {
     try {
       if (editItem._type === 'product') {
         await inventoryApi.update(storeId, editItem.productId, {
-          quantity: parseInt(editQty), maxQuantity: parseInt(editMax) || editItem.maxQuantity
+          quantity: parseInt(editQty), maxQuantity: parseInt(editMax) || editItem.maxQuantity,
+          reason: editReason,
         })
         r1()
       } else {
-        await inventoryApi.updateIngredient(storeId, editItem.ingredientId, { quantity: parseFloat(editQty) })
+        await inventoryApi.updateIngredient(storeId, editItem.ingredientId, { quantity: parseFloat(editQty), reason: editReason })
         r2()
       }
       showToast('Estoque atualizado!')
@@ -190,11 +195,10 @@ export function Estoque() {
               <label className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-3">
                 Motivo do Ajuste
               </label>
-              <select className="w-full bg-surface-container-low border-none rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20">
-                <option>Entrada de Produção</option>
-                <option>Venda Manual</option>
-                <option>Avaria / Perda</option>
-                <option>Inventário Periódico</option>
+              {/* O motivo é gravado no histórico de movimentações (stock_movements) */}
+              <select value={editReason} onChange={e => setEditReason(e.target.value)}
+                className="w-full bg-surface-container-low border-none rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20">
+                {REASONS.map(r => <option key={r}>{r}</option>)}
               </select>
             </div>
           </div>

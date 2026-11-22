@@ -18,6 +18,7 @@ public class InventoryService {
     private final InventoryRepository inventoryRepository;
     private final StoreService storeService;
     private final ProductService productService;
+    private final StockMovementService movementService;
 
     public List<InventoryResponse> findByStore(Long storeId) {
         storeService.getOrThrow(storeId); // valida se loja existe
@@ -44,10 +45,14 @@ public class InventoryService {
                     return newInv;
                 });
 
+        var previous = inv.getQuantity() == null ? 0 : inv.getQuantity();
         inv.setQuantity(req.getQuantity());
         if (req.getMaxQuantity() != null) inv.setMaxQuantity(req.getMaxQuantity());
 
-        return InventoryResponse.from(inventoryRepository.save(inv));
+        var saved = inventoryRepository.save(inv);
+        movementService.recordProduct(store, product,
+                java.math.BigDecimal.valueOf(previous), java.math.BigDecimal.valueOf(req.getQuantity()), req.getReason());
+        return InventoryResponse.from(saved);
     }
 
     /**

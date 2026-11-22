@@ -17,6 +17,7 @@ public class IngredientStockService {
     private final IngredientStockRepository ingredientStockRepository;
     private final StoreService storeService;
     private final IngredientService ingredientService;
+    private final StockMovementService movementService;
 
     public List<IngredientStockResponse> findByStore(Long storeId) {
         storeService.getOrThrow(storeId);
@@ -43,7 +44,10 @@ public class IngredientStockService {
                     return s;
                 });
 
+        var previous = stock.getQuantity() == null ? java.math.BigDecimal.ZERO : stock.getQuantity();
         stock.setQuantity(req.getQuantity());
-        return IngredientStockResponse.from(ingredientStockRepository.save(stock));
+        var saved = ingredientStockRepository.save(stock);
+        movementService.recordIngredient(store, ingredient, previous, req.getQuantity(), req.getReason());
+        return IngredientStockResponse.from(saved);
     }
 }
