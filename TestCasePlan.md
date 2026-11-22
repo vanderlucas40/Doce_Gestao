@@ -4,7 +4,7 @@
 |---|---|
 | Projeto | Doce Gestão — sistema de gestão multi-loja para confeitarias |
 | Fase | Fase 3 — Implementação, Testes e Validação |
-| Versão / data | 1.3 — 22/11/2026 |
+| Versão / data | 1.4 — 22/11/2026 |
 | Equipe | Vandemberg Lucas Lima Melo (2112090004) · Ítalo de Farias Costa (2515050012) |
 | Professor | Jeremias Araújo |
 | Repositório | https://github.com/vanderlucas40/Doce_Gestao |
@@ -254,7 +254,7 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | DEF-18 | Campo de quantidade sumia na Fornada a 375 px | — | RNF04, RF14 | Média | Corrigido | Reteste manual do CT-MAN-09 (375 px) |
 | DEF-19 | Celular sem acesso a Estoque, Relatórios e Equipe | — | RNF04, RF07, RF08, RF17 | Alta | Corrigido | Reteste manual do CT-MAN-09 (375 px) |
 | DEF-20 | CSV com data sem ano; resultado antigo sob intervalo inválido | — | RNF10, RF18 | Baixa | Corrigido | CT-FE-21 |
-| DEF-21 | Elementos sem ação e dados fictícios herdados do protótipo | — | RF11, RF19, RNF04 | Média | Corrigido | CT-SEG-16 + reteste manual das telas |
+| DEF-21 | Elementos sem ação e dados fictícios herdados do protótipo | — | RF11, RF19, RNF04 | Média | Corrigido | CT-SEG-16 + conferência manual das telas (22/11) |
 
 Total: 21 defeitos, todos corrigidos; nenhum defeito Alta aberto.
 
@@ -276,9 +276,10 @@ Total: 21 defeitos, todos corrigidos; nenhum defeito Alta aberto.
 | 22/11/2026 | Frontend com variação do Dashboard (DEF-13) | `npm test` | 19/19 ✅ |
 | 22/11/2026 | Correções DEF-14 a 20 | `mvn test` + `npm test` (equipe) e CI (commit `ae8629d`) | 60/60, `Skipped: 0` + 23/23 ✅ |
 | 22/11/2026 | Reteste CT-MAN-09 | Chrome 375 px e 1280 px | ✅ (DEF-21 achado e corrigido) |
-| 22/11/2026 | Correção DEF-21 | `npm test` (ambiente da IA) | 23/23 ✅; backend 61 casos a confirmar com `mvn test` e no CI |
+| 22/11/2026 | Correção DEF-21 | `mvn test` + `npm test` (equipe) e CI (commit `fcd5442`, tag `v6.0.0`) | 61/61, `Skipped: 0` + 23/23 ✅ |
+| 22/11/2026 | Conferência do DEF-21 na tela | Chrome: Estoque, Dashboard, PDV (admin e operador), Equipe | ✅ |
 
-**Total automatizado: 84 casos (61 backend + 23 frontend), executados também no CI a cada push.** Os relatórios detalhados ficam em `backend/target/surefire-reports/` após cada execução; recomenda-se anexar a saída final de `mvn test` e `npm test` em `docs/evidencias/`.
+**Total automatizado: 84 casos (61 backend + 23 frontend), 100% aprovados, executados também no CI a cada push.** Os relatórios detalhados ficam em `backend/target/surefire-reports/` após cada execução; recomenda-se anexar a saída final de `mvn test` e `npm test` em `docs/evidencias/`.
 
 Durante a execução, os testes revelaram defeitos que a revisão de código não havia apontado: `PotentialStubbingProblem` no próprio teste (ajustado), `LazyInitializationException` no histórico de fornadas (DEF-07, segunda causa) e a decodificação do JWT no frontend (DEF-10). A revisão do log do primeiro run do CI revelou que um resultado verde escondia 28 testes ignorados (DEF-12).
 

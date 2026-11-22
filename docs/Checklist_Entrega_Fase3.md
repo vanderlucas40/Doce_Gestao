@@ -17,14 +17,14 @@ Marque cada item antes do envio (prazo: **03/12/2026**). Responsável e data aju
 
 | OK | Item | Critério de pronto | Resp. | Data |
 |---|---|---|---|---|
-| [ ] | Testes automatizados do backend | `mvn test`: 61/61, `Skipped: 0` (após DEF-21) e CI verde | | |
+| [x] | Testes automatizados do backend | `mvn test`: 61/61, `Skipped: 0` (após DEF-21) e CI verde | Vandemberg | 22/11 |
 | [x] | Testes automatizados do frontend | `npm test`: 23/23 (após DEF-14 a 20) | | 22/11 |
 | [x] | Plano de casos de teste | `TestCasePlan.md` com cenários, resultado esperado, critério, evidências e defeitos | | 22/11 |
 | [x] | Roteiro manual CT-MAN-01 a 05 | Executados e marcados no `TestCasePlan.md` | | 22/11 |
 | [x] | Roteiro manual CT-MAN-06 a 14 | 12 ✅, CT-MAN-09 ❌ → DEF-14 a 20 corrigidos | | 22/11 |
 | [x] | Reteste do CT-MAN-09 | 375 px: ☰ abre o menu e chega ao Estoque; Fornada mostra a quantidade; 1280 px sem corte | | 22/11 |
-| [ ] | Conferir telas do DEF-21 | Estoque com “Últimas Fornadas” reais; botões do Dashboard navegam; Equipe sem desativar o próprio admin | | |
-| [x] | Evidências | `docs/evidencias/`: 36 capturas + índice; `mvn-test.txt` e `npm-test.txt` | | 22/11 |
+| [x] | Conferir telas do DEF-21 | Estoque com “Últimas Fornadas” reais; botões do Dashboard navegam; Equipe sem desativar o próprio admin | | 22/11 |
+| [x] | Evidências | `docs/evidencias/`: 38 capturas + índice; `mvn-test.txt` e `npm-test.txt` | | 22/11 |
 
 ## 3. Documentação
 
@@ -32,7 +32,7 @@ Marque cada item antes do envio (prazo: **03/12/2026**). Responsável e data aju
 |---|---|---|---|---|
 | [x] | Artefatos das Fases 1 e 2 | `docs/fase1`, `docs/fase2` com os nomes do enunciado | | 22/11 |
 | [x] | Registro de Utilização da IA | `docs/fase3/Registro_de_Utilização_da_IA.pdf` | | 22/11 |
-| [ ] | Revisão do Registro de IA | Nome da fase conforme o enunciado; participação de cada integrante, se exigida | | |
+| [x] | Revisão do Registro de IA | Nome da fase conforme o enunciado; participação de cada integrante registrada (v1.4) | | 22/11 |
 | [ ] | README final | Como executar, testar, credenciais de demonstração e link do CI conferidos por quem não escreveu | | |
 
 ## 4. Itens em aberto (decidir antes da entrega)

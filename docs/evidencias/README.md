@@ -16,6 +16,7 @@ Execução de 22/11/2026. Roteiro e resultados em [`TestCasePlan.md`](../../Test
 | `ct-man-11-rede-*` | Aba Rede: maior tempo de API 542 ms (meta: 2 s) |
 | `ct-man-12-csv-excel.png` | CSV exportado aberto no Excel (acentos e colunas corretos; data sem ano → DEF-20) |
 | `ct-man-14-intervalo-maximo.png` | Mensagem de intervalo máximo de 366 dias |
+| `def-21-*` | Conferência do DEF-21: Estoque com “Últimas Fornadas” reais; Equipe sem desativar o próprio admin |
 | `tela-cadastros.png`, `tela-equipe.png` | Telas do administrador |
 
 As capturas `ct-man-09-375px-*` e `ct-man-09-1280px-*` são anteriores às correções e documentam os defeitos; as `ct-man-09-reteste-*` mostram o resultado corrigido. A de 1280 px do reteste revelou o DEF-21 (cronograma fictício no Estoque).
