@@ -12,6 +12,7 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 | DEF-06 | — | RF14, RN11 | Média | Corrigido |
 | DEF-07 | — | RF20 | Alta | Corrigido |
 | DEF-08 | R05 | RN01, RNF02 | Baixa | Corrigido |
+| DEF-09 | R04 | RN06, RNF06 | Alta | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -87,4 +88,15 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 - **Correção:** o guard lança `AccessDeniedException`, já tratada como 403 em JSON pelo `GlobalExceptionHandler`. O acesso continua negado; só o código HTTP muda.
 - **Commit:** `fix(security): acesso a outra loja responde 403`
 - **Testes:** CT-SEG-07, CT-SEG-08.
+
+## DEF-09 — Vendas simultâneas podiam vender além do estoque
+
+- **Sintoma:** dois caixas vendendo o último item ao mesmo tempo: as duas vendas eram gravadas e o estoque registrava só uma baixa (atualização perdida).
+- **Causa:** sem controle de concorrência; cada transação lia o mesmo saldo e gravava por cima da outra (R04). O mesmo valia para o estoque de insumos na fornada.
+- **Correção:**
+  - Migração `V3__optimistic_lock.sql`: coluna `version` em `inventory` e `ingredient_stock`.
+  - `@Version` em `Inventory` e `IngredientStock`: a gravação com saldo desatualizado é recusada e a venda ou fornada é desfeita inteira.
+  - `GlobalExceptionHandler`: o conflito responde HTTP 409 com mensagem em português para o operador tentar de novo.
+- **Commit:** `fix(estoque): bloqueio otimista`
+- **Testes:** CT-EST-01 e CT-EST-02 (versão desatualizada recusada); CT-EST-03 (8 vendas simultâneas, 3 em estoque: saldo final = 3 − vendas gravadas, nunca negativo).
 

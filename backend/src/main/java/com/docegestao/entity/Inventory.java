@@ -34,6 +34,14 @@ public class Inventory {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+    /**
+     * Bloqueio otimista (R04): o UPDATE leva "WHERE version = ?"; se outra transação
+     * gravou antes, lança ObjectOptimisticLockingFailureException e nada é gravado.
+     * Long (e não long): versão nula identifica registro novo para o Spring Data.
+     */
+    @Version
+    private Long version;
+
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();

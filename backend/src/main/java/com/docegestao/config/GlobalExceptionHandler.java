@@ -5,6 +5,7 @@ import com.docegestao.service.ResourceNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -55,6 +56,14 @@ public class GlobalExceptionHandler {
         var map = base(HttpStatus.BAD_REQUEST, firstMessage);
         map.put("fields", fields);
         return ResponseEntity.badRequest().body(map);
+    }
+
+    // ─── 409 Conflito de concorrência no estoque (R04) ───────
+    // Duas operações gravaram o mesmo saldo ao mesmo tempo; a segunda é desfeita inteira
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<Map<String, Object>> handleOptimisticLock(ObjectOptimisticLockingFailureException ex) {
+        return body(HttpStatus.CONFLICT,
+                "O estoque foi alterado por outra operação ao mesmo tempo. Confira o saldo e tente novamente.");
     }
 
     // ─── 409 Violação de integridade do banco ─────────────────
