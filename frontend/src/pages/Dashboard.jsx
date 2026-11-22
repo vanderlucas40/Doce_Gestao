@@ -1,7 +1,7 @@
 import { useStore }                                    from '../hooks/useStore'
 import { useFetch }                                    from '../hooks/useFetch'
 import { salesApi }                                    from '../api'
-import { Icon, Card, fmtBRL, fmtTime }                from '../components/ui'
+import { Icon, Card, fmtBRL, fmtTime, fmtQty }        from '../components/ui'
 import { variation }                                   from '../utils/trend'
 
 export function Dashboard() {
@@ -9,7 +9,7 @@ export function Dashboard() {
   const storeId = currentStore?.id
 
   const { data, loading, error, refetch } =
-    useFetch(() => salesApi.dashboard(storeId), [storeId])
+    useFetch(() => salesApi.dashboard(storeId), [storeId], { enabled: !!storeId })
 
   if (!storeId) return <PageState icon="store" msg="Selecione uma loja para ver o dashboard." />
   if (loading)  return <PageState spinner msg="Carregando dashboard..." />
@@ -84,9 +84,9 @@ export function Dashboard() {
                 <div className="space-y-6 relative z-10">
                   {[...lowStockProducts, ...lowStockIngredients].map((item, i) => {
                     const name = item.productName || item.ingredientName
-                    const pct  = item.maxQuantity
-                      ? Math.round((item.quantity / item.maxQuantity) * 100)
-                      : 0
+                    // Produto: % da capacidade; insumo: % do mínimo cadastrado
+                    const base = item.maxQuantity || item.minQuantity
+                    const pct  = base ? Math.min(100, Math.round((Number(item.quantity) / Number(base)) * 100)) : 0
                     return (
                       <div key={i} className="flex items-center gap-6">
                         <div className="h-1.5 flex-1 bg-outline-variant/30 rounded-full overflow-hidden">
@@ -95,7 +95,7 @@ export function Dashboard() {
                         <div className="w-44">
                           <p className="font-bold text-sm">{name}</p>
                           <p className="text-xs text-error font-semibold">
-                            {item.status === 'OUT' ? 'Esgotado' : `${item.quantity} restantes`}
+                            {item.status === 'OUT' ? 'Esgotado' : `${fmtQty(item.quantity)} ${item.unit || 'un.'} restantes`}
                           </p>
                         </div>
                         <button className="bg-white border border-outline-variant text-on-surface-variant px-4 py-2 rounded-lg text-xs font-bold hover:bg-surface-container-highest transition-colors whitespace-nowrap">

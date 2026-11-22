@@ -2,7 +2,7 @@ import { useAuth }  from '../hooks/useAuth'
 import { useStore } from '../hooks/useStore'
 import { Icon }     from './ui'
 
-export function Sidebar({ currentTab, onTabChange }) {
+export function Sidebar({ currentTab, onTabChange, mobileOpen = false, onClose = () => {} }) {
   const { isAdmin, logout, session } = useAuth()
   const { currentStore }             = useStore()
 
@@ -18,8 +18,15 @@ export function Sidebar({ currentTab, onTabChange }) {
     ] : []),
   ]
 
+  // No celular a barra lateral vira gaveta aberta pelo ☰ (DEF-19); escolher uma tela fecha a gaveta
+  const go = key => { onTabChange(key); onClose() }
+
   return (
-    <aside className="hidden md:flex fixed left-0 top-0 h-screen w-72 bg-stone-100 flex-col p-6 z-40 rounded-r-3xl">
+    <>
+    {mobileOpen && (
+      <div className="md:hidden fixed inset-0 bg-black/30 z-[55]" onClick={onClose} aria-hidden="true" />
+    )}
+    <aside className={`${mobileOpen ? 'flex z-[60]' : 'hidden'} md:flex fixed left-0 top-0 h-screen w-72 bg-stone-100 flex-col p-6 md:z-40 rounded-r-3xl overflow-y-auto`}>
       <div className="flex items-center gap-3 mb-10 px-2">
         <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center">
           <Icon name="cake" fill className="text-white" />
@@ -41,7 +48,7 @@ export function Sidebar({ currentTab, onTabChange }) {
         {tabs.map(t => {
           const active = currentTab === t.key
           return (
-            <button key={t.key} onClick={() => onTabChange(t.key)}
+            <button key={t.key} onClick={() => go(t.key)}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 hover:translate-x-1 ${
                 active ? 'bg-orange-100/80 text-orange-900' : 'text-stone-500 hover:text-stone-700'
               }`}>
@@ -69,5 +76,6 @@ export function Sidebar({ currentTab, onTabChange }) {
         </button>
       </div>
     </aside>
+    </>
   )
 }

@@ -30,6 +30,7 @@ function AppShell() {
   const { session, isAdmin } = useAuth()
   const { empty, loading }   = useStore()
   const [tab, setTab]        = useState('pdv')
+  const [menuOpen, setMenuOpen] = useState(false)
 
   if (!session) return <Login />
   if (loading)  return <FullPageSpinner label="Carregando o sistema..." />
@@ -49,14 +50,14 @@ function AppShell() {
     producao:   <ProducaoLote />,
     relatorios: <Relatorios />,
     cadastros:  isAdmin ? <Cadastros />  : <Dashboard />,
-    equipe:     isAdmin ? <Users />      : <Menu />,
-    menu:       <Menu />,
+    equipe:     isAdmin ? <Users />      : <Menu onTabChange={setTab} />,
+    menu:       <Menu onTabChange={setTab} />,
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <Topbar  currentTab={tab} onTabChange={setTab} />
-      <Sidebar currentTab={tab} onTabChange={setTab} />
+      <Topbar  currentTab={tab} onTabChange={setTab} onMenuClick={() => setMenuOpen(true)} />
+      <Sidebar currentTab={tab} onTabChange={setTab} mobileOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       <main>{pages[tab] ?? <PDV />}</main>
       <BottomNav currentTab={tab} onTabChange={setTab} />
     </div>

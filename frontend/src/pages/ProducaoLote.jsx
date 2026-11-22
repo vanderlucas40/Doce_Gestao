@@ -4,8 +4,7 @@ import { useFetch }                                   from '../hooks/useFetch'
 import { productsApi, productionApi }                 from '../api'
 import {
   Icon, Card, Modal, Toast,
-  useToast, fmtBRL, fmtTime
-} from '../components/ui'
+  useToast, fmtBRL, fmtTime, fmtQty } from '../components/ui'
 
 // ─────────────────────────────────────────────────────────────
 //  Constantes
@@ -45,7 +44,7 @@ export function ProducaoLote() {
 
   // ── Histórico de fornadas ─────────────────────────────────
   const { data: history, refetch: refetchHistory } =
-    useFetch(() => productionApi.list(storeId), [storeId])
+    useFetch(() => productionApi.list(storeId), [storeId], { enabled: !!storeId })
 
   // ── Linhas válidas (produto selecionado + qty > 0) ────────
   const validLines = useMemo(() =>
@@ -329,7 +328,7 @@ export function ProducaoLote() {
                         {ing.insufficient && ' ⚠'}
                       </span>
                       <span className={`font-bold ${hasAdj ? 'text-tertiary' : 'text-on-surface'}`}>
-                        {Number(actual).toFixed(3)} {ing.unit}
+                        {fmtQty(actual)} {ing.unit}
                         {hasAdj && <span className="text-xs text-on-surface-variant ml-1">(ajustado)</span>}
                       </span>
                     </div>
@@ -441,8 +440,8 @@ function BatchLine({ line, products, usedProductIds, onUpdate, onRemove, canRemo
 
   return (
     <div className="grid grid-cols-12 gap-3 items-center bg-surface-container-low rounded-2xl px-4 py-3">
-      {/* Seletor de sabor */}
-      <div className="col-span-7">
+      {/* Seletor de sabor — linha inteira no celular (DEF-18) */}
+      <div className="col-span-12 sm:col-span-7">
         <select
           value={line.productId}
           onChange={e => onUpdate('productId', e.target.value)}
@@ -456,7 +455,7 @@ function BatchLine({ line, products, usedProductIds, onUpdate, onRemove, canRemo
       </div>
 
       {/* Quantidade */}
-      <div className="col-span-3">
+      <div className="col-span-9 sm:col-span-3">
         <div className="flex items-center gap-1">
           <button onClick={() => onUpdate('quantity', Math.max(1, line.quantity - 1))}
             className="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-primary hover:bg-primary-fixed transition-colors flex-shrink-0">
@@ -476,7 +475,7 @@ function BatchLine({ line, products, usedProductIds, onUpdate, onRemove, canRemo
       </div>
 
       {/* Remover */}
-      <div className="col-span-2 flex justify-end">
+      <div className="col-span-3 sm:col-span-2 flex justify-end">
         {canRemove ? (
           <button onClick={onRemove}
             className="p-2 text-on-surface-variant hover:text-error hover:bg-error-container/20 rounded-lg transition-colors">
@@ -594,11 +593,11 @@ function ConsolidationPanel({ preview, loading, adjustments, onAdjust, validLine
                   </div>
                   <div className="text-right">
                     <span className={`text-sm font-bold ${deviated ? 'text-tertiary' : ing.insufficient ? 'text-error' : 'text-on-surface'}`}>
-                      {Number(actualQty).toFixed(3)} {ing.unit}
+                      {fmtQty(actualQty)} {ing.unit}
                     </span>
                     {deviated && (
                       <span className="text-xs text-on-surface-variant block">
-                        sugerido: {Number(ing.suggestedQty).toFixed(3)}
+                        sugerido: {fmtQty(ing.suggestedQty)}
                       </span>
                     )}
                   </div>
@@ -617,14 +616,14 @@ function ConsolidationPanel({ preview, loading, adjustments, onAdjust, validLine
                     />
                   </div>
                   <span className="text-xs text-on-surface-variant whitespace-nowrap">
-                    {Number(ing.stockAvailable).toFixed(3)} disponível
+                    {fmtQty(ing.stockAvailable)} {ing.unit} disponível
                   </span>
                 </div>
 
                 {/* Campo de ajuste de desvio */}
                 <div className="mt-2 ml-6">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-on-surface-variant">Qty real usada:</span>
+                    <span className="text-xs text-on-surface-variant">Qtd. real usada:</span>
                     <input
                       type="number"
                       step="0.001"
@@ -722,7 +721,11 @@ function BatchHistoryRow({ batch }) {
                     <div key={u.ingredientId} className="flex justify-between text-xs">
                       <span className="text-on-surface-variant">{u.ingredientName}</span>
                       <span className={`font-bold ${deviated ? 'text-tertiary' : 'text-on-surface'}`}>
-                        {Number(u.actualQty).toFixed(3)} {u.unit}
+                        {fmtQty(u.actualQty)} {u.unit}
+                        {/* RF20: sugerido x real visível no histórico (DEF-17) */}
+                        {deviated && (
+                          <span className="font-normal text-on-surface-variant"> (sugerido {fmtQty(u.suggestedQty)})</span>
+                        )}
                       </span>
                     </div>
                   )

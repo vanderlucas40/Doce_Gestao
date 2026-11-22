@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useStore }                          from '../hooks/useStore'
 import { salesApi }                          from '../api'
-import { Icon, Card, Toast, useToast, fmtBRL, fmtDate, fmtTime } from '../components/ui'
+import { Icon, Card, Toast, useToast, fmtBRL, fmtDate, fmtTime, fmtDateFull } from '../components/ui'
 
 // ── Helpers de data ───────────────────────────────────────────
 const toISO   = d => d.toISOString().slice(0, 10)
@@ -42,7 +42,8 @@ export function Relatorios() {
   const fetchSales = useCallback(async () => {
     if (!storeId) return
     const err = validateRange(from, to)
-    if (err) { setRangeError(err); return }
+    // Intervalo inválido: some com os números da busca anterior para não confundir
+    if (err) { setRangeError(err); setSales([]); return }
     setRangeError(null)
     setLoading(true)
     try {
@@ -89,7 +90,7 @@ export function Relatorios() {
       ['ID', 'Data', 'Hora', 'Produtos', 'Total (R$)'],
       ...sales.map(s => [
         s.id,
-        fmtDate(s.soldAt),
+        fmtDateFull(s.soldAt),   // dd/mm/aaaa: sem o ano, o Excel assumia o ano atual (DEF-20)
         fmtTime(s.soldAt),
         (s.items || []).map(i => `${i.productName} (${i.quantity}x)`).join(' | '),
         Number(s.total).toFixed(2).replace('.', ','),

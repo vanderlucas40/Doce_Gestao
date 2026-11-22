@@ -160,6 +160,14 @@ class SecurityApiIntegrationTest extends MySqlIntegrationTest {
         as(admin, get("/stores/{id}/inventory", lojaB.getId())).andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("CT-SEG-15: id de loja não numérico na URL responde 400 em português, não 500 (DEF-15)")
+    void idDeLojaInvalido() throws Exception {
+        as(admin, get("/stores/undefined/inventory"))
+           .andExpect(status().isBadRequest())
+           .andExpect(jsonPath("$.message").value("Parâmetro inválido: storeId."));
+    }
+
     // ─── Perfis nos cadastros (RN02) ─────────────────────────
 
     @Test

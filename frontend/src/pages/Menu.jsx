@@ -4,14 +4,15 @@ import { useStore } from '../hooks/useStore'
 import { useState } from 'react'
 
 
+// Atalhos para telas fora da barra inferior (antes eram itens sem ação — DEF-19)
 const MENU_ITEMS = [
-  { icon: 'person',        label: 'Perfil',            sub: 'Dados da conta',         color: 'bg-primary/10 text-primary' },
-  { icon: 'storefront',    label: 'Unidades',          sub: 'Gerenciar lojas',        color: 'bg-secondary/10 text-secondary' },
-  { icon: 'analytics',     label: 'Relatórios Mensais',sub: 'Exportar dados',         color: 'bg-primary/10 text-primary' },
-  { icon: 'support_agent', label: 'Suporte',           sub: 'Central de ajuda',       color: 'bg-tertiary-fixed text-tertiary' },
+  { tab: 'estoque',    icon: 'inventory_2', label: 'Estoque',    sub: 'Produtos e insumos da loja', color: 'bg-primary/10 text-primary' },
+  { tab: 'relatorios', icon: 'analytics',   label: 'Relatórios', sub: 'Vendas por período e CSV',   color: 'bg-secondary/10 text-secondary' },
+  { tab: 'cadastros',  icon: 'menu_book',   label: 'Cadastros',  sub: 'Produtos, insumos e fichas', color: 'bg-primary/10 text-primary',     admin: true },
+  { tab: 'equipe',     icon: 'group',       label: 'Equipe',     sub: 'Usuários e acessos',         color: 'bg-tertiary-fixed text-tertiary', admin: true },
 ]
 
-export function Menu() {
+export function Menu({ onTabChange = () => {} }) {
   const { session, logout, isAdmin } = useAuth()
   const { stores, currentStore, setCurrentStore } = useStore()
   const [storeOpen, setStoreOpen] = useState(false)
@@ -95,15 +96,16 @@ export function Menu() {
       <section className="space-y-6">
         <div>
           <h3 className="text-[10px] uppercase tracking-[0.15em] text-outline px-2 mb-3 font-bold">
-            Gestão e Perfil
+            Telas
           </h3>
           <div className="bg-surface-container-lowest rounded-[2rem] overflow-hidden shadow-card">
             <nav className="flex flex-col">
-              {MENU_ITEMS.map((item, i) => (
+              {MENU_ITEMS.filter(item => !item.admin || isAdmin).map((item, i, items) => (
                 <button
                   key={item.label}
+                  onClick={() => onTabChange(item.tab)}
                   className={`flex items-center justify-between p-5 hover:bg-surface-container-low transition-colors group ${
-                    i < MENU_ITEMS.length - 1 ? 'border-b border-outline-variant/10' : ''
+                    i < items.length - 1 ? 'border-b border-outline-variant/10' : ''
                   }`}
                 >
                   <div className="flex items-center gap-4">

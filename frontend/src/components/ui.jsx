@@ -88,6 +88,10 @@ export function Card({ children, className = '', padding = 'p-6' }) {
 
 // ── Formatadores ──────────────────────────────────────────────
 export const fmtBRL  = v => Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+/** Quantidade em pt-BR: vírgula decimal, até 3 casas, sem zeros à direita (8,5 · 0,35 · 24) — DEF-16 */
+export const fmtQty  = v => Number(v ?? 0).toLocaleString('pt-BR', { maximumFractionDigits: 3 })
+/** Data completa dd/mm/aaaa (RNF10), usada no CSV — DEF-20 */
+export const fmtDateFull = iso => new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
 export const fmtDate = iso => new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
 export const fmtTime = iso => new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
 

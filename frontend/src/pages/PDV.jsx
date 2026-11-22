@@ -12,11 +12,11 @@ export function PDV() {
   const { toast, show: showToast } = useToast()
 
   const { data: inventory, loading, error, refetch: refetchInv } =
-    useFetch(() => inventoryApi.listByStore(storeId), [storeId])
+    useFetch(() => inventoryApi.listByStore(storeId), [storeId], { enabled: !!storeId })
 
   const { data: sales, refetch: refetchSales } =
     // Só as vendas de hoje, filtradas no servidor (antes baixava todas e filtrava no navegador — R06)
-    useFetch(() => salesApi.byDate(storeId, todayISO()), [storeId])
+    useFetch(() => salesApi.byDate(storeId, todayISO()), [storeId], { enabled: !!storeId })
 
   const [cart,         setCart]         = useState([])
   const [modal,        setModal]        = useState(null)

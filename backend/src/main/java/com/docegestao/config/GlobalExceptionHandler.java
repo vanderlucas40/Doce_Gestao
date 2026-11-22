@@ -14,6 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -56,6 +57,13 @@ public class GlobalExceptionHandler {
         var map = base(HttpStatus.BAD_REQUEST, firstMessage);
         map.put("fields", fields);
         return ResponseEntity.badRequest().body(map);
+    }
+
+    // ─── 400 Parâmetro de URL com tipo errado (DEF-15) ───────
+    // Ex.: /stores/undefined/inventory — antes caía no handler genérico e respondia 500
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, Object>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return body(HttpStatus.BAD_REQUEST, "Parâmetro inválido: " + ex.getName() + ".");
     }
 
     // ─── 409 Conflito de concorrência no estoque (R04) ───────

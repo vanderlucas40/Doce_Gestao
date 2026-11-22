@@ -2,7 +2,7 @@ import { useState }                                          from 'react'
 import { useStore }                                          from '../hooks/useStore'
 import { useFetch }                                          from '../hooks/useFetch'
 import { inventoryApi }                                      from '../api'
-import { Icon, Modal, Toast, StatusBadge, StockBar, useToast, fmtBRL } from '../components/ui'
+import { Icon, Modal, Toast, StatusBadge, StockBar, useToast, fmtBRL, fmtQty } from '../components/ui'
 
 const REASONS = ['Entrada de Produção', 'Venda Manual', 'Avaria / Perda', 'Inventário Periódico']
 
@@ -19,12 +19,13 @@ export function Estoque() {
   const [editReason, setEditReason] = useState(REASONS[0])
   const [submitting, setSubmitting] = useState(false)
 
-  const { data: inventory,   loading: l1, refetch: r1 } = useFetch(() => inventoryApi.listByStore(storeId),   [storeId])
-  const { data: ingredients, loading: l2, refetch: r2 } = useFetch(() => inventoryApi.listIngredients(storeId), [storeId])
+  const { data: inventory,   loading: l1, refetch: r1 } = useFetch(() => inventoryApi.listByStore(storeId),   [storeId], { enabled: !!storeId })
+  const { data: ingredients, loading: l2, refetch: r2 } = useFetch(() => inventoryApi.listIngredients(storeId), [storeId], { enabled: !!storeId })
 
   function openEdit(item, type) {
     setEditItem({ ...item, _type: type })
-    setEditQty(String(type === 'product' ? item.quantity : Number(item.quantity).toFixed(1)))
+    // Sem toFixed(1): abrir e salvar sem mexer arredondava 1,05 para 1,1 (DEF-16)
+    setEditQty(String(type === 'product' ? item.quantity : Number(item.quantity)))
     setEditMax(String(item.maxQuantity || ''))
     setEditReason(REASONS[0])
   }
@@ -290,7 +291,7 @@ function IngredientCard({ item, onEdit }) {
             </span>
           </div>
           <p className="text-xs text-on-surface-variant mt-1">
-            Mín: {Number(item.minQuantity).toFixed(1)} {item.unit}
+            Mín: {fmtQty(item.minQuantity)} {item.unit}
           </p>
         </div>
       </div>
@@ -299,7 +300,7 @@ function IngredientCard({ item, onEdit }) {
           <p className="text-[10px] font-bold text-on-surface-variant opacity-60 uppercase">QTD Atual</p>
           <div className="flex items-baseline gap-1">
             <span className={`text-2xl font-bold ${item.belowMinimum ? 'text-error' : 'text-on-surface'}`}>
-              {Number(item.quantity).toFixed(1)}
+              {fmtQty(item.quantity)}
             </span>
             <span className="text-xs text-on-surface-variant">{item.unit}</span>
           </div>

@@ -5,7 +5,7 @@ import { Icon }      from './ui'
 
 const STORE_COLORS = ['#924a3a','#516447','#635e53','#6b4f2b','#3a5a6a']
 
-export function Topbar({ currentTab, onTabChange }) {
+export function Topbar({ currentTab, onTabChange, onMenuClick }) {
   const { session, logout, isAdmin }              = useAuth()
   const { stores, currentStore, setCurrentStore } = useStore()
   const [storeOpen, setStoreOpen] = useState(false)
@@ -30,13 +30,16 @@ export function Topbar({ currentTab, onTabChange }) {
     <>
       <header className="fixed top-0 w-full z-50 bg-stone-50/80 backdrop-blur-lg shadow-[0_8px_24px_rgba(43,22,19,0.06)] flex justify-between items-center px-6 py-4">
         <div className="flex items-center gap-4">
-          <Icon name="menu" className="text-orange-900 cursor-pointer" />
+          {/* ☰ só no celular: abre o menu lateral como gaveta (DEF-19) */}
+          <button onClick={onMenuClick} aria-label="Abrir menu" className="md:hidden p-1 -ml-1 rounded-lg">
+            <Icon name="menu" className="text-orange-900" />
+          </button>
           <h1 className="font-serif italic text-xl text-orange-900">JM Bolos e Confeitaria</h1>
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Links desktop — overflow scroll se necessário */}
-          <div className="hidden md:flex gap-4 mr-3 overflow-x-auto max-w-md">
+          {/* Links no topo só em telas bem largas; abaixo disso o menu lateral já navega (DEF-14) */}
+          <div className="hidden 2xl:flex gap-4 mr-3">
             {tabs.map(t => (
               <button key={t.key} onClick={() => onTabChange(t.key)}
                 className={`text-[10px] uppercase tracking-widest font-bold whitespace-nowrap transition-colors flex-shrink-0 ${

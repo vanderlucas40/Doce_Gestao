@@ -1,7 +1,7 @@
 import { useState }                                              from 'react'
 import { useFetch }                                              from '../hooks/useFetch'
 import { productsApi, ingredientsApi, recipeApi }               from '../api'
-import { Icon, Card, Modal, Toast, useToast, fmtBRL }           from '../components/ui'
+import { Icon, Card, Modal, Toast, useToast, fmtBRL, fmtQty }           from '../components/ui'
 
 export function Cadastros() {
   const { toast, show: showToast } = useToast()
@@ -320,7 +320,7 @@ function RecipeModal({ product, ingredients, onClose, showToast }) {
                   <div>
                     <p className="text-sm font-semibold text-on-surface">{item.ingredientName}</p>
                     <p className="text-xs text-on-surface-variant">
-                      {Number(item.quantity).toFixed(4)} {item.unit} por unidade
+                      {fmtQty(item.quantity)} {item.unit} por unidade
                     </p>
                   </div>
                 </div>
@@ -445,7 +445,7 @@ function IngredientCatalogCard({ item, onEdit, onDeact }) {
       <div className="p-4">
         <h3 className="font-bold text-on-surface mb-1 leading-tight">{item.name}</h3>
         <p className="text-xs text-on-surface-variant mb-3">
-          Unidade: <strong>{item.unit}</strong> · Mín: <strong>{Number(item.minQuantity).toFixed(1)}</strong>
+          Unidade: <strong>{item.unit}</strong> · Mín: <strong>{fmtQty(item.minQuantity)}</strong>
         </p>
         <div className="flex gap-1.5">
           <button onClick={onEdit}

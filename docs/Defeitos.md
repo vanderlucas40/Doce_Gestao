@@ -17,6 +17,13 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 | DEF-11 | — | RF09, RN06 | Baixa | Corrigido |
 | DEF-12 | R09 | RNF06, RNF07 | Média | Corrigido |
 | DEF-13 | — | RF11 | Média | Corrigido |
+| DEF-14 | — | RNF04 | Baixa | Corrigido |
+| DEF-15 | — | RNF05 | Média | Corrigido |
+| DEF-16 | — | RNF10, RF07, RF08 | Média | Corrigido |
+| DEF-17 | — | RF20 | Baixa | Corrigido |
+| DEF-18 | — | RNF04, RF14 | Média | Corrigido |
+| DEF-19 | — | RNF04, RF07, RF08, RF17 | Alta | Corrigido |
+| DEF-20 | — | RNF10, RF18 | Baixa | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -136,6 +143,22 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 - **Testes:** CT-VEN-07, CT-VEN-08 (backend), CT-FE-18, CT-FE-19 (frontend).
 
 **Na mesma entrega:** os botões de categoria do PDV (Tudo, Bolos, Doces, Salgados) foram removidos: os produtos não têm categoria e o filtro não fazia nada. Categoria de produto fica registrada como evolução futura.
+
+## DEF-14 a DEF-20 — encontrados no roteiro manual (CT-MAN-06 a 14)
+
+Todos achados na execução manual de 22/11/2026, no clone limpo, com capturas em `docs/evidencias/`. Corrigidos no commit `fix(frontend): defeitos do roteiro manual (DEF-14 a DEF-20)`.
+
+| ID | Sintoma | Causa | Correção | Teste |
+|---|---|---|---|---|
+| DEF-14 | Para o administrador, o menu do topo cortava “Equipe” (“…CADASTROS EC”); entre 768 e 1280 px a tela ficava espremida | Links do topo num contêiner de largura fixa (`max-w-md`) e exibidos junto com o menu lateral | Links do topo só em telas ≥ 1536 px; abaixo disso o menu lateral navega | Manual (CT-MAN-09) |
+| DEF-15 | Console com `GET /stores/undefined/inventory` → 500 ao abrir PDV, Estoque, Dashboard e Fornada | `useFetch` disparava antes de a loja carregar; id não numérico caía no handler genérico (500) | `useFetch(..., { enabled })` nas telas de loja e descarte de resposta antiga; `MethodArgumentTypeMismatchException` → 400 “Parâmetro inválido: storeId.” | CT-FE-22, CT-FE-23, CT-SEG-15 |
+| DEF-16 | “24.000 disponível” (24 latas lidas como 24 mil); saldo 1,05 exibido “1.1”, 7,55 como “7.5”, 2,25 como “2.3”; abrir o ajuste e salvar sem mexer gravava o valor arredondado | `toFixed(3)`/`toFixed(1)` com ponto; formulário de ajuste preenchido com `toFixed(1)` | `fmtQty` (vírgula, até 3 casas) em Fornada, Estoque, Dashboard e Cadastros; formulário com o valor exato; alertas com unidade; rótulo “Qtd. real usada” | CT-FE-20 |
+| DEF-17 | Histórico de fornadas mostrava só o consumo real, sem o sugerido (RF20) | Tela só destacava a cor do desvio | Exibe “0,35 kg (sugerido 0,3)” quando há desvio | Manual (CT-MAN-08) |
+| DEF-18 | Fornada a 375 px: campo de quantidade sumia e o sabor ficava cortado | Grade de 12 colunas fixa (7/3/2) em qualquer largura | Sabor em linha inteira e quantidade abaixo em telas pequenas | Manual (CT-MAN-09) |
+| DEF-19 | No celular não havia como chegar a Estoque, Relatórios e Equipe: ☰ sem ação, barra inferior com 4 itens, itens da tela Menu sem ação | Ícone ☰ decorativo; menu lateral oculto abaixo de 768 px | ☰ abre o menu lateral como gaveta (fecha ao escolher); tela Menu com atalhos reais (Estoque, Relatórios e, para admin, Cadastros e Equipe) | Manual (CT-MAN-09) |
+| DEF-20 | CSV com data “22/11” sem ano (o Excel assume o ano atual); números da busca anterior permaneciam sob a mensagem de intervalo inválido | `fmtDate` sem ano no CSV; resultado não era limpo | CSV com dd/mm/aaaa (`fmtDateFull`); intervalo inválido limpa o resultado | CT-FE-21, manual (CT-MAN-12, 14) |
+
+**Limitação aceita pela equipe:** a tela de login mostra sempre as credenciais de demonstração (`admin / admin123 · operador.centro / operador123`), para facilitar a avaliação. Em uso real, desligar o seed (`APP_SEED_ENABLED=false`) e trocar as senhas.
 
 ## Melhorias sem defeito funcional (Step 10)
 
