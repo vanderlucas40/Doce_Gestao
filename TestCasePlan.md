@@ -4,7 +4,7 @@
 |---|---|
 | Projeto | Doce Gestão — sistema de gestão multi-loja para confeitarias |
 | Fase | Fase 3 — Implementação, Testes e Validação |
-| Versão / data | 1.2 — 22/11/2026 |
+| Versão / data | 1.3 — 22/11/2026 |
 | Equipe | Vandemberg Lucas Lima Melo (2112090004) · Ítalo de Farias Costa (2515050012) |
 | Professor | Jeremias Araújo |
 | Repositório | https://github.com/vanderlucas40/Doce_Gestao |
@@ -30,7 +30,7 @@ Verificar que o sistema cumpre os requisitos **Must** e **Should** da Fase 1, co
 
 **Como executar:**
 ```bash
-cd backend  && mvn test    # 60 casos; os de integração exigem Docker ativo
+cd backend  && mvn test    # 61 casos; os de integração exigem Docker ativo
 cd frontend && npm test    # 23 casos
 ```
 
@@ -105,7 +105,7 @@ cd frontend && npm test    # 23 casos
 | CT-EST-04 | Ajustes manuais gravam motivo, autor e saldo anterior/novo (R10) | API (MockMvc + MySQL real) | RF07, RF08 | — | `MovementsAndPagingApiIntegrationTest#ajusteGravaMovimentacao` | ✅ Passou |
 | CT-EST-05 | Operador não vê movimentações de outra loja (403) | API (MockMvc + MySQL real) | RN01, RNF02 | DEF-08 | `MovementsAndPagingApiIntegrationTest#movimentacoesOutraLoja` | ✅ Passou |
 
-### 4.5 Acesso e segurança (15 casos)
+### 4.5 Acesso e segurança (16 casos)
 
 | ID | Cenário e resultado esperado | Tipo | Requisitos | Defeito | Implementação | Resultado |
 |---|---|---|---|---|---|---|
@@ -124,6 +124,7 @@ cd frontend && npm test    # 23 casos
 | CT-SEG-13 | Ficha técnica: operador consulta, só o administrador altera | API (MockMvc + MySQL real) | RF13, RN02 | — | `SecurityApiIntegrationTest#fichaTecnica` | ✅ Passou |
 | CT-SEG-14 | Gestão de usuários é exclusiva do administrador | API (MockMvc + MySQL real) | RF19, RN02 | — | `SecurityApiIntegrationTest#usuarios` | ✅ Passou |
 | CT-SEG-15 | Id de loja não numérico na URL responde 400 em português, não 500 | API (MockMvc + MySQL real) | RNF05 | DEF-15 | `SecurityApiIntegrationTest#idDeLojaInvalido` | ✅ Passou |
+| CT-SEG-16 | Administrador não consegue desativar o próprio usuário | API (MockMvc + MySQL real) | RF19, RN02 | DEF-21 | `SecurityApiIntegrationTest#adminNaoSeDesativa` | ✅ Passou |
 
 ### 4.6 Cadastros (3 casos)
 
@@ -175,14 +176,14 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | CT-MAN-06 | Fluxo do operador | `operador.centro` → PDV → vender Bolo de Cenoura e Brigadeiro | Venda registrada; estoque 3→2 e 12→10; Dashboard com R$ 81,00 e sem percentual (sem vendas ontem) | RF09, RF10, RF04, RF11 | ✅ 22/11 |
 | CT-MAN-07 | Ajuste de estoque pelo operador | Estoque → Açúcar 9 → 8, motivo “Avaria / Perda” | Salvo sem 403; movimentação com motivo, autor e saldos | RF07, RF08 | ✅ 22/11 (achado DEF-15) |
 | CT-MAN-08 | Fluxo do padeiro | Fichas técnicas → fornada Cenoura 2 + Brigadeiro 3 → 2ª fornada com desvio da farinha (0,35) | Resumo consolidado; insumos abatidos pelo real; produtos somados; histórico | RF13–RF16, RF20, RN09–RN13 | ✅ 22/11 (achados DEF-16, DEF-17) |
-| CT-MAN-09 | Responsividade | PDV, Estoque, Fornada em 375 px e 1280 px | Barra inferior no celular com acesso a todas as telas; menu lateral no desktop | RNF04 | ❌ 22/11 → DEF-14, 18, 19 corrigidos; ⬜ reteste |
+| CT-MAN-09 | Responsividade | PDV, Estoque, Fornada em 375 px e 1280 px | Barra inferior no celular com acesso a todas as telas; menu lateral no desktop | RNF04 | ❌ 22/11 → DEF-14, 18, 19 corrigidos → ✅ reteste 22/11 (achado DEF-21) |
 | CT-MAN-10 | Navegadores | Login + venda + Estoque no Chrome e no Edge | Mesmo comportamento | RNF09 | ✅ 22/11 (Chrome, Edge) |
 | CT-MAN-11 | Desempenho | Aba Rede: PDV, Estoque, Dashboard | Respostas da API em até 2 s | RNF03 | ✅ 22/11 (máx. 542 ms) |
 | CT-MAN-12 | Relatório e CSV | Relatórios → 7 dias → exportar CSV | Valores em R$, CSV legível no Excel | RF17, RF18, RNF10 | ✅ 22/11 (achado DEF-20) |
 | CT-MAN-13 | Alertas de estoque baixo | Dashboard da Loja Centro | Produtos abaixo de 30% e insumos abaixo do mínimo listados | RF12, RN08 | ✅ 22/11 (5 itens) |
 | CT-MAN-14 | Intervalo do relatório | Intervalo de 386 dias; data inicial após a final | Mensagens de intervalo máximo e de data inicial posterior | RN14 | ✅ 22/11 |
 
-**Defeitos achados no roteiro:** DEF-14 a DEF-20, todos corrigidos no commit `fix(frontend): defeitos do roteiro manual`. O CT-MAN-09 deve ser repetido após a correção (375 px: ☰ abre o menu; Fornada mostra o campo de quantidade).
+**Defeitos achados no roteiro:** DEF-14 a DEF-20, corrigidos no commit `fix(frontend): defeitos do roteiro manual`. No reteste do CT-MAN-09 (☰ abre o menu a 375 px, Estoque acessível, Fornada com a quantidade visível, topo a 1280 px sem corte), a captura do Estoque revelou o DEF-21 (cronograma fictício e botões sem ação), também corrigido.
 
 > Capturas de cada caso em [`docs/evidencias/`](docs/evidencias/README.md).
 
@@ -206,10 +207,10 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | RF15 | CT-PRO-01, CT-PRO-02, CT-PRO-03 | 3 |
 | RF16 | CT-PRO-06, CT-PRO-15 | 2 |
 | RF18 | CT-FE-21 | 1 |
-| RF19 | CT-SEG-14 | 1 |
+| RF19 | CT-SEG-14, CT-SEG-16 | 2 |
 | RF20 | CT-PRO-15 | 1 |
 | RN01 | CT-EST-05, CT-SEG-05, CT-SEG-06, CT-SEG-07, CT-SEG-08, CT-SEG-09 | 6 |
-| RN02 | CT-SEG-10, CT-SEG-11, CT-SEG-12, CT-SEG-13, CT-SEG-14 | 5 |
+| RN02 | CT-SEG-10, CT-SEG-11, CT-SEG-12, CT-SEG-13, CT-SEG-14, CT-SEG-16 | 6 |
 | RN03 | CT-CAD-01 | 1 |
 | RN04 | CT-CAD-02 | 1 |
 | RN05 | CT-CAD-03, CT-SEG-04 | 2 |
@@ -253,8 +254,9 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | DEF-18 | Campo de quantidade sumia na Fornada a 375 px | — | RNF04, RF14 | Média | Corrigido | Reteste manual do CT-MAN-09 (375 px) |
 | DEF-19 | Celular sem acesso a Estoque, Relatórios e Equipe | — | RNF04, RF07, RF08, RF17 | Alta | Corrigido | Reteste manual do CT-MAN-09 (375 px) |
 | DEF-20 | CSV com data sem ano; resultado antigo sob intervalo inválido | — | RNF10, RF18 | Baixa | Corrigido | CT-FE-21 |
+| DEF-21 | Elementos sem ação e dados fictícios herdados do protótipo | — | RF11, RF19, RNF04 | Média | Corrigido | CT-SEG-16 + reteste manual das telas |
 
-Total: 20 defeitos, todos corrigidos; nenhum defeito Alta aberto.
+Total: 21 defeitos, todos corrigidos; nenhum defeito Alta aberto.
 
 ## 8. Evidências de execução
 
@@ -267,14 +269,16 @@ Total: 20 defeitos, todos corrigidos; nenhum defeito Alta aberto.
 | 22/11/2026 | Backend: + movimentações e paginação (Step 10) | `mvn test` | 59/59 ✅ |
 | 22/11/2026 | Frontend (Step 11) | `npm test` | 17/17 ✅ |
 | 22/11/2026 | Aceitação: CT-MAN-01 a 05 | `docker compose up --build` + navegador | ✅ |
-| 22/11/2026 | Clone limpo + roteiro CT-MAN-06 a 14 | Pasta nova, banco novo, Chrome e Edge | 12 ✅, 1 ❌ (CT-MAN-09); 7 defeitos (DEF-14 a 20) |
+| 22/11/2026 | Clone limpo + roteiro CT-MAN-06 a 14 | Pasta nova, banco novo, Chrome e Edge | 12 ✅, 1 ❌ (CT-MAN-09, aprovado no reteste); 7 defeitos (DEF-14 a 20) |
 | 22/11/2026 | CI, 1º run (commit `2e2badf`) | GitHub Actions | ⚠️ verde, mas 28 testes ignorados (DEF-12) |
 | 22/11/2026 | Backend com Testcontainers 1.21.4 | `mvn test` (Docker Desktop 29.9.3) | 59/59, 0 ignorados ✅ |
 | 22/11/2026 | CI (commit `12ebb35`, tag `v6.0.0`) | GitHub Actions: backend, frontend, smoke test | 59/59 + 17/17 + compose `Healthy` ✅ |
 | 22/11/2026 | Frontend com variação do Dashboard (DEF-13) | `npm test` | 19/19 ✅ |
-| 22/11/2026 | Correções DEF-14 a 20 | `npm test` (ambiente da IA) | 23/23 ✅; backend 60 casos a confirmar com `mvn test` e no CI |
+| 22/11/2026 | Correções DEF-14 a 20 | `mvn test` + `npm test` (equipe) e CI (commit `ae8629d`) | 60/60, `Skipped: 0` + 23/23 ✅ |
+| 22/11/2026 | Reteste CT-MAN-09 | Chrome 375 px e 1280 px | ✅ (DEF-21 achado e corrigido) |
+| 22/11/2026 | Correção DEF-21 | `npm test` (ambiente da IA) | 23/23 ✅; backend 61 casos a confirmar com `mvn test` e no CI |
 
-**Total automatizado: 83 casos (60 backend + 23 frontend), executados também no CI a cada push.** Os relatórios detalhados ficam em `backend/target/surefire-reports/` após cada execução; recomenda-se anexar a saída final de `mvn test` e `npm test` em `docs/evidencias/`.
+**Total automatizado: 84 casos (61 backend + 23 frontend), executados também no CI a cada push.** Os relatórios detalhados ficam em `backend/target/surefire-reports/` após cada execução; recomenda-se anexar a saída final de `mvn test` e `npm test` em `docs/evidencias/`.
 
 Durante a execução, os testes revelaram defeitos que a revisão de código não havia apontado: `PotentialStubbingProblem` no próprio teste (ajustado), `LazyInitializationException` no histórico de fornadas (DEF-07, segunda causa) e a decodificação do JWT no frontend (DEF-10). A revisão do log do primeiro run do CI revelou que um resultado verde escondia 28 testes ignorados (DEF-12).
 

@@ -17,13 +17,14 @@ Marque cada item antes do envio (prazo: **03/12/2026**). Responsável e data aju
 
 | OK | Item | Critério de pronto | Resp. | Data |
 |---|---|---|---|---|
-| [ ] | Testes automatizados do backend | `mvn test`: 60/60, `Skipped: 0` (após DEF-15) | | |
+| [ ] | Testes automatizados do backend | `mvn test`: 61/61, `Skipped: 0` (após DEF-21) e CI verde | | |
 | [x] | Testes automatizados do frontend | `npm test`: 23/23 (após DEF-14 a 20) | | 22/11 |
 | [x] | Plano de casos de teste | `TestCasePlan.md` com cenários, resultado esperado, critério, evidências e defeitos | | 22/11 |
 | [x] | Roteiro manual CT-MAN-01 a 05 | Executados e marcados no `TestCasePlan.md` | | 22/11 |
 | [x] | Roteiro manual CT-MAN-06 a 14 | 12 ✅, CT-MAN-09 ❌ → DEF-14 a 20 corrigidos | | 22/11 |
-| [ ] | Reteste do CT-MAN-09 | 375 px: ☰ abre o menu e chega ao Estoque; Fornada mostra a quantidade; 1280 px sem corte | | |
-| [x] | Evidências | `docs/evidencias/`: 32 capturas + índice; `mvn-test.txt` e `npm-test.txt` | | 22/11 |
+| [x] | Reteste do CT-MAN-09 | 375 px: ☰ abre o menu e chega ao Estoque; Fornada mostra a quantidade; 1280 px sem corte | | 22/11 |
+| [ ] | Conferir telas do DEF-21 | Estoque com “Últimas Fornadas” reais; botões do Dashboard navegam; Equipe sem desativar o próprio admin | | |
+| [x] | Evidências | `docs/evidencias/`: 36 capturas + índice; `mvn-test.txt` e `npm-test.txt` | | 22/11 |
 
 ## 3. Documentação
 
