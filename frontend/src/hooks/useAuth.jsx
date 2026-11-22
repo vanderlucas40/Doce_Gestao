@@ -4,10 +4,22 @@ import { setToken, getToken, clearToken } from '../api/client'
 
 const AuthContext = createContext(null)
 
-/** Decodifica o payload do JWT sem biblioteca externa */
-function parsePayload(token) {
+/**
+ * Decodifica o segmento base64url do JWT. O atob() puro falha com '-' e '_' (base64url)
+ * e corrompe acentos (UTF-8), o que fazia a sessão perder perfil e loja em parte dos
+ * logins, conforme o horário de expiração gerava esses caracteres (DEF-10).
+ */
+export function decodeBase64Url(segment) {
+  const b64    = segment.replace(/-/g, '+').replace(/_/g, '/')
+  const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4)
+  const bytes  = Uint8Array.from(atob(padded), c => c.charCodeAt(0))
+  return new TextDecoder('utf-8').decode(bytes)
+}
+
+/** Decodifica o payload do JWT sem biblioteca externa; null se inválido ou expirado */
+export function parsePayload(token) {
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]))
+    const payload = JSON.parse(decodeBase64Url(token.split('.')[1]))
     // Verifica expiração (exp está em segundos)
     if (payload.exp && Date.now() / 1000 > payload.exp) return null
     return {

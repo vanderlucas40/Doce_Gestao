@@ -13,6 +13,8 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 | DEF-07 | — | RF20 | Alta | Corrigido |
 | DEF-08 | R05 | RN01, RNF02 | Baixa | Corrigido |
 | DEF-09 | R04 | RN06, RNF06 | Alta | Corrigido |
+| DEF-10 | — | RF01, RF02, RF04 | Alta | Corrigido |
+| DEF-11 | — | RF09, RN06 | Baixa | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -99,6 +101,21 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
   - `GlobalExceptionHandler`: o conflito responde HTTP 409 com mensagem em português para o operador tentar de novo.
 - **Commit:** `fix(estoque): bloqueio otimista`
 - **Testes:** CT-EST-01 e CT-EST-02 (versão desatualizada recusada); CT-EST-03 (8 vendas simultâneas, 3 em estoque: saldo final = 3 − vendas gravadas, nunca negativo).
+
+## DEF-10 — Parte dos logins perdia perfil e loja no frontend
+
+- **Sintoma:** depois de logar, o usuário podia aparecer sem perfil (menus de administrador ocultos) ou sem loja vinculada; ao recarregar a página, a sessão sumia. Dependia do token: nomes com acento ou certos horários de expiração disparavam o problema.
+- **Causa:** `useAuth.parsePayload` usava `atob()` direto no payload do JWT. O JWT usa base64url (`-` e `_`), que o `atob` rejeita (`InvalidCharacterError`), e o texto decodificado não era tratado como UTF-8.
+- **Correção:** `decodeBase64Url` converte base64url → base64, completa o padding e decodifica os bytes como UTF-8 (`TextDecoder`).
+- **Commit:** `fix(frontend): decodifica JWT base64url e valida estoque no carrinho`
+- **Teste:** CT-FE-14 (falha com o código anterior: `InvalidCharacterError`).
+
+## DEF-11 — Carrinho aceitava produto sem estoque
+
+- **Sintoma:** no PDV, um produto com estoque 0 (ou quantidade maior que o saldo, na primeira inclusão) entrava no carrinho; o erro só aparecia ao finalizar a venda.
+- **Causa:** o limite de estoque só era conferido ao somar a um item que já estava no carrinho.
+- **Correção:** regras do carrinho extraídas para `utils/cart.js` (funções puras) com o limite conferido também na primeira inclusão; total arredondado a centavos.
+- **Testes:** CT-FE-01 a CT-FE-06.
 
 ## Melhorias sem defeito funcional (Step 10)
 

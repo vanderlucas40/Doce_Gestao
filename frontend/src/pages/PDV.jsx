@@ -3,6 +3,8 @@ import { useStore }                                                  from '../ho
 import { useFetch }                                                  from '../hooks/useFetch'
 import { inventoryApi, salesApi }                                    from '../api'
 import { Icon, Modal, Toast, StockBar, useToast, fmtBRL, fmtTime }  from '../components/ui'
+import { addItem, changeQty as changeCartQty, removeItem, cartTotal, cartQty as countItems, toSaleRequest } from '../utils/cart'
+import { todayISO }                                                  from '../utils/date'
 
 export function PDV() {
   const { currentStore }           = useStore()
@@ -24,58 +26,33 @@ export function PDV() {
 
   const CATEGORIES = ['Tudo', 'Bolos', 'Doces', 'Salgados']
 
-  // ── Carrinho: adicionar ───────────────────────────────────────
+  // ── Carrinho (regras puras em utils/cart.js) ──────────────────
   const addToCart = useCallback((item, qty = 1) => {
-    setCart(prev => {
-      const existing = prev.find(c => c.productId === item.productId)
-      if (existing) {
-        const newQty = existing.qty + qty
-        if (newQty > item.quantity) return prev // excede estoque
-        return prev.map(c => c.productId === item.productId ? { ...c, qty: newQty } : c)
-      }
-      return [...prev, {
-        productId: item.productId,
-        name:      item.productName,
-        price:     Number(item.productPrice),
-        qty,
-        maxQty:    item.quantity,
-      }]
-    })
+    setCart(prev => addItem(prev, item, qty))
     setModal(null)
     showToast(`${item.productName} adicionado!`)
   }, [showToast])
 
-  // ── Carrinho: alterar quantidade inline ───────────────────────
-  const changeQty = useCallback((productId, delta) => {
-    setCart(prev => prev
-      .map(c => {
-        if (c.productId !== productId) return c
-        const newQty = c.qty + delta
-        if (newQty <= 0) return null          // remove se chegar a 0
-        if (newQty > c.maxQty) return c       // não ultrapassa estoque
-        return { ...c, qty: newQty }
-      })
-      .filter(Boolean)
-    )
-  }, [])
-
-  const removeFromCart = useCallback(
-    productId => setCart(prev => prev.filter(c => c.productId !== productId)),
+  const changeQty = useCallback(
+    (productId, delta) => setCart(prev => changeCartQty(prev, productId, delta)),
     []
   )
 
-  const cartTotal = cart.reduce((s, c) => s + c.price * c.qty, 0)
-  const cartQty   = cart.reduce((s, c) => s + c.qty, 0)
+  const removeFromCart = useCallback(
+    productId => setCart(prev => removeItem(prev, productId)),
+    []
+  )
+
+  const total   = cartTotal(cart)
+  const cartQty = countItems(cart)
 
   // ── Finalizar venda ───────────────────────────────────────────
   async function handleFinalize() {
     if (!cart.length) return
     setSubmitting(true)
     try {
-      const sale = await salesApi.register(storeId, {
-        items: cart.map(c => ({ productId: c.productId, quantity: c.qty }))
-      })
-      setSuccessModal({ total: cartTotal, itemCount: cartQty, sale })
+      const sale = await salesApi.register(storeId, toSaleRequest(cart))
+      setSuccessModal({ total, itemCount: cartQty, sale })
       setCart([])
       refetchInv()
       refetchSales()
@@ -174,14 +151,14 @@ export function PDV() {
             {/* Totais */}
             <div className="pt-4 border-t border-outline-variant/20 space-y-2.5">
               <div className="flex justify-between text-on-surface-variant text-sm">
-                <span>Subtotal</span><span>{fmtBRL(cartTotal)}</span>
+                <span>Subtotal</span><span>{fmtBRL(total)}</span>
               </div>
               <div className="flex justify-between text-on-surface-variant text-sm">
                 <span>Taxa de entrega</span><span>R$ 0,00</span>
               </div>
               <div className="flex justify-between items-center pt-2">
                 <span className="font-serif text-xl">Total</span>
-                <span className="font-serif text-3xl text-primary">{fmtBRL(cartTotal)}</span>
+                <span className="font-serif text-3xl text-primary">{fmtBRL(total)}</span>
               </div>
               <button
                 onClick={handleFinalize}
@@ -391,10 +368,4 @@ function PageState({ spinner, icon, msg, action, actionLabel }) {
       </div>
     </div>
   )
-}
-
-/** Data local (não UTC) no formato aaaa-mm-dd, como o backend espera em /sales/by-date */
-function todayISO() {
-  const d = new Date()
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
