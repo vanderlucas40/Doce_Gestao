@@ -1,0 +1,33 @@
+﻿
+> docegestao-frontend@2.0.0 test
+> vitest run
+
+node.exe : [33mThe CJS build of Vite's Node API is deprecated. See 
+https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+No linha:1 caractere:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\vande\AppData\Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([33mThe CJS bu...e details.[39m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(node:40444) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of 
+file:///C:/Users/vande/OneDrive/Documentos/docegestao-v5-stable-completo/frontend/postcss.config.js is not specified 
+and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to 
+C:\Users\vande\OneDrive\Documentos\docegestao-v5-stable-completo\frontend\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mC:/Users/vande/OneDrive/Documentos/docegestao-v5-stable-completo/frontend[39m
+
+ [32mÔ£ô[39m src/utils/date.test.js [2m([22m[2m1 test[22m[2m)[22m[90m 6[2mms[22m[39m
+ [32mÔ£ô[39m src/utils/trend.test.js [2m([22m[2m2 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32mÔ£ô[39m src/utils/cart.test.js [2m([22m[2m6 tests[22m[2m)[22m[90m 14[2mms[22m[39m
+ [32mÔ£ô[39m src/api/client.test.js [2m([22m[2m5 tests[22m[2m)[22m[90m 39[2mms[22m[39m
+ [32mÔ£ô[39m src/hooks/useAuth.test.jsx [2m([22m[2m5 tests[22m[2m)[22m[90m 23[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m19 passed[39m[22m[90m (19)[39m
+[2m   Start at [22m 16:23:24
+[2m   Duration [22m 6.93s[2m (transform 358ms, setup 0ms, collect 2.67s, tests 89ms, environment 21.40s, prepare 2.02s)[22m
+
