@@ -40,8 +40,11 @@ public class SecurityConfig {
                 // ── Rotas exclusivas de ADMIN ───────────────────────
                 // Criar/excluir lojas, produtos e insumos
                 .requestMatchers(HttpMethod.POST,   "/stores").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT,    "/stores/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/stores/**").hasRole("ADMIN")
+                // "/stores/*" casa só /stores/{id}; as sub-rotas da loja
+                // (/stores/{id}/inventory/..., /ingredient-stock/...) ficam
+                // liberadas ao operador e protegidas pelo StoreAccessGuard (DEF-01)
+                .requestMatchers(HttpMethod.PUT,    "/stores/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/stores/*").hasRole("ADMIN")
 
                 .requestMatchers(HttpMethod.POST,   "/products").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT,    "/products/**").hasRole("ADMIN")
