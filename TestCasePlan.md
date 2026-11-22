@@ -4,7 +4,7 @@
 |---|---|
 | Projeto | Doce Gestão — sistema de gestão multi-loja para confeitarias |
 | Fase | Fase 3 — Implementação, Testes e Validação |
-| Versão / data | 1.0 — 22/11/2026 |
+| Versão / data | 1.1 — 22/11/2026 |
 | Equipe | Vandemberg Lucas Lima Melo (2112090004) · Ítalo de Farias Costa (2515050012) |
 | Professor | Jeremias Araújo |
 | Repositório | https://github.com/vanderlucas40/Doce_Gestao |
@@ -22,7 +22,8 @@ Verificar que o sistema cumpre os requisitos **Must** e **Should** da Fase 1, co
 | Unitário (backend) | JUnit 5, Mockito, AssertJ | Regras de negócio dos serviços (venda, fornada, ficha técnica, baixa de estoque) |
 | Integração (backend) | Spring Boot Test + Testcontainers (MySQL 8 real, migrações Flyway, `ddl-auto=validate`) | Atomicidade, persistência, histórico, concorrência |
 | API (backend) | MockMvc + Spring Security + Testcontainers | Autenticação, perfis, isolamento por loja, contratos HTTP |
-| Unitário (frontend) | Vitest + jsdom + Testing Library | Cliente HTTP, sessão (`useAuth`), carrinho do PDV |
+| Unitário (frontend) | Vitest + jsdom + Testing Library | Cliente HTTP, sessão (`useAuth`), carrinho do PDV, variação do Dashboard |
+| Integração contínua | GitHub Actions (`.github/workflows/ci.yml`) | A cada push na `main`: as duas suítes, build e smoke test do `docker compose` (sobe, faz login, confere 401); falha se algum teste for ignorado |
 | Aceitação (manual) | Navegador + Docker Compose | Fluxos de ponta a ponta, responsividade, portabilidade |
 
 **Ambiente de execução:** Java 21.0.7, Maven 3.9.14, Docker Desktop (Testcontainers com `mysql:8.0`), Node 20 / Vitest 2.1.9.
@@ -30,7 +31,7 @@ Verificar que o sistema cumpre os requisitos **Must** e **Should** da Fase 1, co
 **Como executar:**
 ```bash
 cd backend  && mvn test    # 59 casos; os de integração exigem Docker ativo
-cd frontend && npm test    # 17 casos
+cd frontend && npm test    # 19 casos
 ```
 
 ## 3. Critérios de aceitação
@@ -52,8 +53,8 @@ cd frontend && npm test    # 17 casos
 | CT-VEN-04 | Produto inexistente não baixa estoque nem grava venda | Unitário (Mockito) | RF09 | — | `SaleServiceTest#produtoInexistente` | ✅ Passou |
 | CT-VEN-05 | Loja inexistente é rejeitada antes de qualquer item | Unitário (Mockito) | RF09 | — | `SaleServiceTest#lojaInexistente` | ✅ Passou |
 | CT-VEN-06 | Register é transacional, condição da atomicidade da venda | Unitário (Mockito) | RNF06 | — | `SaleServiceTest#registerEhTransacional` | ✅ Passou |
-| CT-VEN-07 | Painel do dia soma faturamento, conta vendas e limita a 10 os últimos pedidos | Unitário (Mockito) | RF11 | — | `SaleServiceTest#dashboardDoDia` | ✅ Passou |
-| CT-VEN-08 | Painel sem vendas mostra faturamento zero | Unitário (Mockito) | RF11 | — | `SaleServiceTest#dashboardSemVendas` | ✅ Passou |
+| CT-VEN-07 | Painel do dia soma faturamento, conta vendas, traz o dia anterior e limita a 10 os últimos pedidos | Unitário (Mockito) | RF11 | DEF-13 | `SaleServiceTest#dashboardDoDia` | ✅ Passou |
+| CT-VEN-08 | Painel sem vendas hoje nem ontem mostra zero nos dois dias | Unitário (Mockito) | RF11 | DEF-13 | `SaleServiceTest#dashboardSemVendas` | ✅ Passou |
 | CT-VEN-09 | Baixa subtrai a quantidade vendida | Unitário (Mockito) | RF10 | — | `InventoryServiceTest#baixaSubtrai` | ✅ Passou |
 | CT-VEN-10 | Vender exatamente o saldo zera o estoque | Unitário (Mockito) | RF10 | — | `InventoryServiceTest#baixaDoSaldoExato` | ✅ Passou |
 | CT-VEN-11 | Quantidade maior que o estoque é recusada com mensagem em português | Unitário (Mockito) | RN06, RNF05 | — | `InventoryServiceTest#estoqueInsuficiente` | ✅ Passou |
@@ -131,7 +132,7 @@ cd frontend && npm test    # 17 casos
 | CT-CAD-02 | Preço zero é recusado com o campo indicado | API (MockMvc + MySQL real) | RF05, RN04, RNF05 | — | `SecurityApiIntegrationTest#precoZero` | ✅ Passou |
 | CT-CAD-03 | Excluir produto apenas o desativa e o tira da listagem | API (MockMvc + MySQL real) | RF05, RN05 | — | `SecurityApiIntegrationTest#desativarProduto` | ✅ Passou |
 
-### 4.7 Frontend (17 casos)
+### 4.7 Frontend (19 casos)
 
 | ID | Cenário e resultado esperado | Tipo | Requisitos | Defeito | Implementação | Resultado |
 |---|---|---|---|---|---|---|
@@ -152,6 +153,8 @@ cd frontend && npm test    # 17 casos
 | CT-FE-15 | Token expirado ou malformado não abre sessão | Unitário (Vitest/jsdom) | RF01, RNF01 | — | `useAuth.test.jsx` | ✅ Passou |
 | CT-FE-16 | Login guarda o token e expõe o perfil; logout limpa | Unitário (Vitest/jsdom) | RF01 | — | `useAuth.test.jsx` | ✅ Passou |
 | CT-FE-17 | Sessão é restaurada ao recarregar a página; expirada é descartada | Unitário (Vitest/jsdom) | RF01 | — | `useAuth.test.jsx` | ✅ Passou |
+| CT-FE-18 | Alta, queda e estabilidade com percentual arredondado | Unitário (Vitest/jsdom) | RF11 | DEF-13 | `trend.test.js` | ✅ Passou |
+| CT-FE-19 | Sem movimento ontem não há percentual (nada inventado na tela) | Unitário (Vitest/jsdom) | RF11 | DEF-13 | `trend.test.js` | ✅ Passou |
 
 ## 5. Roteiro de aceitação manual
 
@@ -190,7 +193,7 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | RF08 | CT-EST-02, CT-EST-04, CT-SEG-06 | 3 |
 | RF09 | CT-FE-01, CT-FE-02, CT-FE-03, CT-FE-04, CT-FE-05, CT-VEN-01, CT-VEN-04, CT-VEN-05 | 8 |
 | RF10 | CT-VEN-01, CT-VEN-03, CT-VEN-09, CT-VEN-10, CT-VEN-12, CT-VEN-14 | 6 |
-| RF11 | CT-VEN-07, CT-VEN-08 | 2 |
+| RF11 | CT-FE-18, CT-FE-19, CT-VEN-07, CT-VEN-08 | 4 |
 | RF13 | CT-FIC-01, CT-FIC-02, CT-FIC-03, CT-FIC-04, CT-FIC-05, CT-SEG-13 | 6 |
 | RF14 | CT-PRO-04, CT-PRO-15 | 2 |
 | RF15 | CT-PRO-01, CT-PRO-02, CT-PRO-03 | 3 |
@@ -233,8 +236,10 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | DEF-09 | Vendas simultâneas podiam vender além do estoque | R04 | RN06, RNF06 | Alta | Corrigido | CT-EST-01, CT-EST-02, CT-EST-03 |
 | DEF-10 | Parte dos logins perdia perfil e loja no frontend | — | RF01, RF02, RF04 | Alta | Corrigido | CT-FE-14 |
 | DEF-11 | Carrinho aceitava produto sem estoque | — | RF09, RN06 | Baixa | Corrigido | CT-FE-02, CT-FE-03 |
+| DEF-12 | CI verde com os testes de integração ignorados | R09 | RNF06, RNF07 | Média | Corrigido | CI: passo que falha com teste ignorado (Skipped: 0 no run do commit 12ebb35) |
+| DEF-13 | Dashboard exibia variações inventadas | — | RF11 | Média | Corrigido | CT-VEN-07, CT-VEN-08, CT-FE-18, CT-FE-19 |
 
-Total: 11 defeitos, todos corrigidos; nenhum defeito Alta aberto.
+Total: 13 defeitos, todos corrigidos; nenhum defeito Alta aberto.
 
 ## 8. Evidências de execução
 
@@ -247,17 +252,21 @@ Total: 11 defeitos, todos corrigidos; nenhum defeito Alta aberto.
 | 22/11/2026 | Backend: + movimentações e paginação (Step 10) | `mvn test` | 59/59 ✅ |
 | 22/11/2026 | Frontend (Step 11) | `npm test` | 17/17 ✅ |
 | 22/11/2026 | Aceitação: CT-MAN-01 a 05 | `docker compose up --build` + navegador | ✅ |
+| 22/11/2026 | CI, 1º run (commit `2e2badf`) | GitHub Actions | ⚠️ verde, mas 28 testes ignorados (DEF-12) |
+| 22/11/2026 | Backend com Testcontainers 1.21.4 | `mvn test` (Docker Desktop 29.9.3) | 59/59, 0 ignorados ✅ |
+| 22/11/2026 | CI (commit `12ebb35`, tag `v6.0.0`) | GitHub Actions: backend, frontend, smoke test | 59/59 + 17/17 + compose `Healthy` ✅ |
+| 22/11/2026 | Frontend com variação do Dashboard (DEF-13) | `npm test` | 19/19 ✅ |
 
-**Total automatizado: 76 casos (59 backend + 17 frontend), 100% aprovados.** Os relatórios detalhados ficam em `backend/target/surefire-reports/` após cada execução; recomenda-se anexar a saída final de `mvn test` e `npm test` em `docs/evidencias/`.
+**Total automatizado: 78 casos (59 backend + 19 frontend), 100% aprovados, executados também no CI a cada push.** Os relatórios detalhados ficam em `backend/target/surefire-reports/` após cada execução; recomenda-se anexar a saída final de `mvn test` e `npm test` em `docs/evidencias/`.
 
-Durante a execução, os testes revelaram defeitos que a revisão de código não havia apontado: `PotentialStubbingProblem` no próprio teste (ajustado), `LazyInitializationException` no histórico de fornadas (DEF-07, segunda causa) e a decodificação do JWT no frontend (DEF-10).
+Durante a execução, os testes revelaram defeitos que a revisão de código não havia apontado: `PotentialStubbingProblem` no próprio teste (ajustado), `LazyInitializationException` no histórico de fornadas (DEF-07, segunda causa) e a decodificação do JWT no frontend (DEF-10). A revisão do log do primeiro run do CI revelou que um resultado verde escondia 28 testes ignorados (DEF-12).
 
 ## 9. Limitações conhecidas e itens em aberto
 
 | Item | Situação | Encaminhamento |
 |---|---|---|
-| Variação "+12%" e "+5%" no Dashboard | Valores fixos na tela (RF11) | Calcular contra o dia anterior ou remover |
-| Categorias do PDV | Apenas visuais; não filtram produtos | Documentar como limitação ou implementar categoria no produto |
+| Categoria de produto | Botões falsos removidos do PDV (não filtravam nada) | Evolução futura: coluna de categoria no produto e filtro no PDV |
 | Token JWT em `localStorage` (R07) | Exposto a XSS | CSP no Nginx; cookie httpOnly em versão futura |
 | CORS fixo em localhost (R09) | Quebra em outro domínio | Tornar configurável por variável de ambiente |
 | Instância única de API e banco (R10) | Sem alta disponibilidade | Aceito para o escopo acadêmico |
+
