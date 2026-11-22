@@ -26,32 +26,32 @@
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-17:31:29.099 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.21.4
-17:31:30.122 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with Environment variables, system properties and defaults. Resolved dockerHost=tcp://localhost:2375
-17:31:30.124 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
-17:31:30.165 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+17:56:35.466 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.21.4
+17:56:36.554 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with Environment variables, system properties and defaults. Resolved dockerHost=tcp://localhost:2375
+17:56:36.556 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+17:56:36.595 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
   Server Version: 29.9.3
   API Version: 1.56
   Operating System: Docker Desktop
   Total Memory: 3760 MB
   Labels: 
     com.docker.desktop.address=npipe://\\.\pipe\docker_cli
-17:31:30.187 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
-17:31:30.191 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
-17:31:30.580 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Creating container for image: testcontainers/ryuk:0.12.0
-17:31:31.493 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 is starting: 18c5fc9d24ed0749978ad7cb7b75532f0282b784e21450b28c6c01e996157c2b
-17:31:33.597 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 started in PT3.0171126S
-17:31:33.620 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
-17:31:33.620 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
-17:31:33.623 [main] INFO org.testcontainers.DockerClientFactory -- ?? Docker server version should be at least 1.6.0
+17:56:36.619 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+17:56:36.621 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+17:56:36.982 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Creating container for image: testcontainers/ryuk:0.12.0
+17:56:37.639 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 is starting: 0f555b8779c68da8f005f8a5879702f58c4b0a428c8a4746b19ccc45f0543fc1
+17:56:39.923 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 started in PT2.9409402S
+17:56:39.970 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+17:56:39.971 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+17:56:39.973 [main] INFO org.testcontainers.DockerClientFactory -- ?? Docker server version should be at least 1.6.0
 [INFO] Running com.docegestao.controller.MovementsAndPagingApiIntegrationTest
-17:31:33.663 [main] INFO tc.mysql:8.0 -- Creating container for image: mysql:8.0
-17:31:34.176 [main] INFO tc.mysql:8.0 -- Container mysql:8.0 is starting: 92cfbdd735fbf14a4ecc25433ac9d9d47d64c9a081b4b4e8a29a5a05fe8840c9
-17:31:35.424 [main] INFO tc.mysql:8.0 -- Waiting for database connection to become available at jdbc:mysql://localhost:59981/test using query 'SELECT 1'
-17:31:56.901 [main] INFO tc.mysql:8.0 -- Container mysql:8.0 started in PT23.2368215S
-17:31:56.902 [main] INFO tc.mysql:8.0 -- Container is started (JDBC URL: jdbc:mysql://localhost:59981/test)
-17:31:57.079 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.docegestao.controller.MovementsAndPagingApiIntegrationTest]: MovementsAndPagingApiIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-17:31:57.371 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.controller.MovementsAndPagingApiIntegrationTest
+17:56:40.004 [main] INFO tc.mysql:8.0 -- Creating container for image: mysql:8.0
+17:56:40.553 [main] INFO tc.mysql:8.0 -- Container mysql:8.0 is starting: 6a29e1bf6779dedf9cb72ea3ba0c2f3d618e6527081a74b1e3b7373e78314772
+17:56:42.023 [main] INFO tc.mysql:8.0 -- Waiting for database connection to become available at jdbc:mysql://localhost:55212/test using query 'SELECT 1'
+17:57:11.598 [main] INFO tc.mysql:8.0 -- Container mysql:8.0 started in PT31.5927085S
+17:57:11.600 [main] INFO tc.mysql:8.0 -- Container is started (JDBC URL: jdbc:mysql://localhost:55212/test)
+17:57:11.785 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.docegestao.controller.MovementsAndPagingApiIntegrationTest]: MovementsAndPagingApiIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:57:12.558 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.controller.MovementsAndPagingApiIntegrationTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -61,63 +61,63 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.5)
 
-2026-11-22T17:31:58.072-03:00  INFO 36044 --- [           main] d.c.MovementsAndPagingApiIntegrationTest : Starting MovementsAndPagingApiIntegrationTest using Java 21.0.7 with PID 36044 (started by vande in C:\Users\vande\OneDrive\Documentos\docegestao-v5-stable-completo\backend)
-2026-11-22T17:31:58.075-03:00  INFO 36044 --- [           main] d.c.MovementsAndPagingApiIntegrationTest : No active profile set, falling back to 1 default profile: "default"
-2026-11-22T17:31:59.944-03:00  INFO 36044 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-11-22T17:32:00.129-03:00  INFO 36044 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 169 ms. Found 10 JPA repository interfaces.
-2026-11-22T17:32:02.352-03:00  INFO 36044 --- [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
-2026-11-22T17:32:02.352-03:00  INFO 36044 --- [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
-2026-11-22T17:32:02.352-03:00  INFO 36044 --- [           main] o.f.c.internal.license.VersionPrinter    : 
-2026-11-22T17:32:02.494-03:00  INFO 36044 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://localhost:59981/test (MySQL 8.0)
-2026-11-22T17:32:02.657-03:00  INFO 36044 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `test`.`flyway_schema_history` does not exist yet
-2026-11-22T17:32:02.666-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.068s)
-2026-11-22T17:32:02.726-03:00  INFO 36044 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `test`.`flyway_schema_history` ...
-2026-11-22T17:32:02.989-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `test`: << Empty Schema >>
-2026-11-22T17:32:03.027-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `test` to version "1 - initial schema"
-2026-11-22T17:32:03.671-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `test` to version "2 - production batch"
-2026-11-22T17:32:04.160-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `test` to version "3 - optimistic lock"
-2026-11-22T17:32:04.478-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `test` to version "4 - stock movements and indexes"
-2026-11-22T17:32:04.768-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 4 migrations to schema `test`, now at version v4 (execution time 00:01.498s)
-2026-11-22T17:32:05.125-03:00  INFO 36044 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-11-22T17:32:05.477-03:00  INFO 36044 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
-2026-11-22T17:32:05.592-03:00  INFO 36044 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-11-22T17:32:06.291-03:00  INFO 36044 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-11-22T17:32:06.375-03:00  INFO 36044 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-11-22T17:32:06.484-03:00  INFO 36044 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3c74d846
-2026-11-22T17:32:06.487-03:00  INFO 36044 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-11-22T17:32:06.585-03:00  WARN 36044 --- [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-11-22T17:32:08.628-03:00  INFO 36044 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-11-22T17:32:08.690-03:00  INFO 36044 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-11-22T17:32:09.895-03:00  INFO 36044 --- [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-11-22T17:32:11.410-03:00  WARN 36044 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-11-22T17:32:12.050-03:00  INFO 36044 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@228ec493, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5592464a, org.springframework.security.web.context.SecurityContextHolderFilter@24037ea, org.springframework.security.web.header.HeaderWriterFilter@676a2d36, org.springframework.web.filter.CorsFilter@26b37ec, org.springframework.security.web.authentication.logout.LogoutFilter@21af717b, com.docegestao.security.JwtAuthFilter@dc72335, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3072b38f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@61c3b31c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7342eb53, org.springframework.security.web.session.SessionManagementFilter@13638ddf, org.springframework.security.web.access.ExceptionTranslationFilter@3e12aa8b, org.springframework.security.web.access.intercept.AuthorizationFilter@55c445e5]
-2026-11-22T17:32:13.007-03:00  INFO 36044 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2026-11-22T17:32:13.007-03:00  INFO 36044 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2026-11-22T17:32:13.010-03:00  INFO 36044 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
-2026-11-22T17:32:13.058-03:00  INFO 36044 --- [           main] d.c.MovementsAndPagingApiIntegrationTest : Started MovementsAndPagingApiIntegrationTest in 15.429 seconds (process running for 45.582)
-mvn : WARNING: A Java agent has been loaded dynamically 
-(C:\Users\vande\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.13\byte-buddy-agent-1.14.13.jar)
+2026-11-22T17:57:13.291-03:00  INFO 40448 --- [           main] d.c.MovementsAndPagingApiIntegrationTest : Starting MovementsAndPagingApiIntegrationTest using Java 21.0.7 with PID 40448 (started by vande in C:\Users\vande\OneDrive\Documentos\docegestao-v5-stable-completo\backend)
+2026-11-22T17:57:13.294-03:00  INFO 40448 --- [           main] d.c.MovementsAndPagingApiIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-11-22T17:57:15.855-03:00  INFO 40448 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-22T17:57:16.052-03:00  INFO 40448 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 167 ms. Found 10 JPA repository interfaces.
+2026-11-22T17:57:17.857-03:00  INFO 40448 --- [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-11-22T17:57:17.858-03:00  INFO 40448 --- [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-11-22T17:57:17.858-03:00  INFO 40448 --- [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-11-22T17:57:18.012-03:00  INFO 40448 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://localhost:55212/test (MySQL 8.0)
+2026-11-22T17:57:18.200-03:00  INFO 40448 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `test`.`flyway_schema_history` does not exist yet
+2026-11-22T17:57:18.211-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.075s)
+2026-11-22T17:57:18.287-03:00  INFO 40448 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `test`.`flyway_schema_history` ...
+2026-11-22T17:57:18.494-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `test`: << Empty Schema >>
+2026-11-22T17:57:18.523-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `test` to version "1 - initial schema"
+2026-11-22T17:57:19.224-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `test` to version "2 - production batch"
+2026-11-22T17:57:19.631-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `test` to version "3 - optimistic lock"
+2026-11-22T17:57:19.945-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `test` to version "4 - stock movements and indexes"
+2026-11-22T17:57:20.298-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 4 migrations to schema `test`, now at version v4 (execution time 00:01.594s)
+2026-11-22T17:57:20.559-03:00  INFO 40448 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-22T17:57:20.776-03:00  INFO 40448 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-11-22T17:57:20.879-03:00  INFO 40448 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-11-22T17:57:21.328-03:00  INFO 40448 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-22T17:57:21.380-03:00  INFO 40448 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-11-22T17:57:21.477-03:00  INFO 40448 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@66859ea9
+2026-11-22T17:57:21.482-03:00  INFO 40448 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-11-22T17:57:21.595-03:00  WARN 40448 --- [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-11-22T17:57:23.562-03:00  INFO 40448 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-22T17:57:23.634-03:00  INFO 40448 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-22T17:57:24.720-03:00  INFO 40448 --- [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-22T17:57:26.209-03:00  WARN 40448 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-22T17:57:27.304-03:00  INFO 40448 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5a8bcae1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6a6b5f00, org.springframework.security.web.context.SecurityContextHolderFilter@4d121ab6, org.springframework.security.web.header.HeaderWriterFilter@13638ddf, org.springframework.web.filter.CorsFilter@5fb65af5, org.springframework.security.web.authentication.logout.LogoutFilter@26b37ec, com.docegestao.security.JwtAuthFilter@4a6dd88e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@10ea1754, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4c14b1bd, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@166a81d9, org.springframework.security.web.session.SessionManagementFilter@43c4f7ee, org.springframework.security.web.access.ExceptionTranslationFilter@778bdf42, org.springframework.security.web.access.intercept.AuthorizationFilter@9a72eee]
+2026-11-22T17:57:28.978-03:00  INFO 40448 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-22T17:57:28.979-03:00  INFO 40448 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-22T17:57:28.983-03:00  INFO 40448 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 3 ms
+2026-11-22T17:57:29.050-03:00  INFO 40448 --- [           main] d.c.MovementsAndPagingApiIntegrationTest : Started MovementsAndPagingApiIntegrationTest in 16.272 seconds (process running for 54.927)
+mvn : Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap 
+classpath has been appended
 No linha:1 caractere:13
 + cd backend; mvn test 2>&1 | Out-File -Encoding utf8 ..\docs\evidencia ...
 +             ~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (WARNING: A Java...nt-1.14.13.jar):String) [], RemoteException
+    + CategoryInfo          : NotSpecified: (Java HotSpot(TM...s been appended:String) [], RemoteException
     + FullyQualifiedErrorId : NativeCommandError
  
+WARNING: A Java agent has been loaded dynamically 
+(C:\Users\vande\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.13\byte-buddy-agent-1.14.13.jar)
 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
 WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
 WARNING: Dynamic loading of agents will be disallowed by default in a future release
-Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap 
-classpath has been appended
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 45.83 s -- in com.docegestao.controller.MovementsAndPagingApiIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 52.99 s -- in com.docegestao.controller.MovementsAndPagingApiIntegrationTest
 [INFO] Running com.docegestao.security.SecurityApiIntegrationTest
-2026-11-22T17:32:19.479-03:00  INFO 36044 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.docegestao.security.SecurityApiIntegrationTest]: SecurityApiIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-22T17:32:19.615-03:00  INFO 36044 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.security.SecurityApiIntegrationTest
-[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.439 s -- in com.docegestao.security.SecurityApiIntegrationTest
+2026-11-22T17:57:32.976-03:00  INFO 40448 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.docegestao.security.SecurityApiIntegrationTest]: SecurityApiIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-22T17:57:33.029-03:00  INFO 40448 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.security.SecurityApiIntegrationTest
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.577 s -- in com.docegestao.security.SecurityApiIntegrationTest
 [INFO] Running com.docegestao.service.InventoryServiceTest
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.993 s -- in com.docegestao.service.InventoryServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.013 s -- in com.docegestao.service.InventoryServiceTest
 [INFO] Running com.docegestao.service.ProductionServiceIntegrationTest
-2026-11-22T17:32:24.943-03:00  INFO 36044 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.docegestao.service.ProductionServiceIntegrationTest]: ProductionServiceIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-22T17:32:25.086-03:00  INFO 36044 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.service.ProductionServiceIntegrationTest
+2026-11-22T17:57:36.611-03:00  INFO 40448 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.docegestao.service.ProductionServiceIntegrationTest]: ProductionServiceIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-22T17:57:36.730-03:00  INFO 40448 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.service.ProductionServiceIntegrationTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -127,49 +127,49 @@ classpath has been appended
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.5)
 
-2026-11-22T17:32:25.219-03:00  INFO 36044 --- [           main] c.d.s.ProductionServiceIntegrationTest   : Starting ProductionServiceIntegrationTest using Java 21.0.7 with PID 36044 (started by vande in C:\Users\vande\OneDrive\Documentos\docegestao-v5-stable-completo\backend)
-2026-11-22T17:32:25.220-03:00  INFO 36044 --- [           main] c.d.s.ProductionServiceIntegrationTest   : No active profile set, falling back to 1 default profile: "default"
-2026-11-22T17:32:26.143-03:00  INFO 36044 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-11-22T17:32:26.245-03:00  INFO 36044 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 101 ms. Found 10 JPA repository interfaces.
-2026-11-22T17:32:26.938-03:00  INFO 36044 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://localhost:59981/test (MySQL 8.0)
-2026-11-22T17:32:27.103-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.111s)
-2026-11-22T17:32:27.165-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `test`: 4
-2026-11-22T17:32:27.172-03:00  INFO 36044 --- [           main] o.f.core.internal.command.DbMigrate      : Schema `test` is up to date. No migration necessary.
-2026-11-22T17:32:27.295-03:00  INFO 36044 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-11-22T17:32:27.307-03:00  INFO 36044 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-11-22T17:32:27.322-03:00  INFO 36044 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-11-22T17:32:27.327-03:00  INFO 36044 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
-2026-11-22T17:32:27.434-03:00  INFO 36044 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1e7c2765
-2026-11-22T17:32:27.435-03:00  INFO 36044 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
-2026-11-22T17:32:27.442-03:00  WARN 36044 --- [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-11-22T17:32:28.198-03:00  INFO 36044 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-11-22T17:32:28.272-03:00  INFO 36044 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-11-22T17:32:29.386-03:00  WARN 36044 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-11-22T17:32:29.721-03:00  INFO 36044 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5db16956, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7976560c, org.springframework.security.web.context.SecurityContextHolderFilter@62fc75fa, org.springframework.security.web.header.HeaderWriterFilter@7b3a721, org.springframework.web.filter.CorsFilter@5a2dbab3, org.springframework.security.web.authentication.logout.LogoutFilter@749a0f3b, com.docegestao.security.JwtAuthFilter@e2333ef, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@48232913, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@52b31599, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1df0f641, org.springframework.security.web.session.SessionManagementFilter@6bf994a6, org.springframework.security.web.access.ExceptionTranslationFilter@6799bd93, org.springframework.security.web.access.intercept.AuthorizationFilter@6f750dea]
-2026-11-22T17:32:30.159-03:00  INFO 36044 --- [           main] c.d.s.ProductionServiceIntegrationTest   : Started ProductionServiceIntegrationTest in 5.054 seconds (process running for 62.683)
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.194 s -- in com.docegestao.service.ProductionServiceIntegrationTest
+2026-11-22T17:57:36.924-03:00  INFO 40448 --- [           main] c.d.s.ProductionServiceIntegrationTest   : Starting ProductionServiceIntegrationTest using Java 21.0.7 with PID 40448 (started by vande in C:\Users\vande\OneDrive\Documentos\docegestao-v5-stable-completo\backend)
+2026-11-22T17:57:36.925-03:00  INFO 40448 --- [           main] c.d.s.ProductionServiceIntegrationTest   : No active profile set, falling back to 1 default profile: "default"
+2026-11-22T17:57:37.984-03:00  INFO 40448 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-22T17:57:38.123-03:00  INFO 40448 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 137 ms. Found 10 JPA repository interfaces.
+2026-11-22T17:57:38.904-03:00  INFO 40448 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://localhost:55212/test (MySQL 8.0)
+2026-11-22T17:57:39.024-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.063s)
+2026-11-22T17:57:39.088-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `test`: 4
+2026-11-22T17:57:39.095-03:00  INFO 40448 --- [           main] o.f.core.internal.command.DbMigrate      : Schema `test` is up to date. No migration necessary.
+2026-11-22T17:57:39.229-03:00  INFO 40448 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-22T17:57:39.240-03:00  INFO 40448 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-11-22T17:57:39.255-03:00  INFO 40448 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-22T17:57:39.260-03:00  INFO 40448 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-11-22T17:57:39.399-03:00  INFO 40448 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4d40fe37
+2026-11-22T17:57:39.400-03:00  INFO 40448 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-11-22T17:57:39.411-03:00  WARN 40448 --- [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-11-22T17:57:40.206-03:00  INFO 40448 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-22T17:57:40.233-03:00  INFO 40448 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-22T17:57:41.289-03:00  WARN 40448 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-22T17:57:41.705-03:00  INFO 40448 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3446bba2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@486765f1, org.springframework.security.web.context.SecurityContextHolderFilter@236d434f, org.springframework.security.web.header.HeaderWriterFilter@3d8b888f, org.springframework.web.filter.CorsFilter@73b3dfe9, org.springframework.security.web.authentication.logout.LogoutFilter@6373f5de, com.docegestao.security.JwtAuthFilter@1d756c41, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1dd1a777, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7cff9bb2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@59ea19a4, org.springframework.security.web.session.SessionManagementFilter@5080dc92, org.springframework.security.web.access.ExceptionTranslationFilter@57caa7, org.springframework.security.web.access.intercept.AuthorizationFilter@732b3b00]
+2026-11-22T17:57:42.338-03:00  INFO 40448 --- [           main] c.d.s.ProductionServiceIntegrationTest   : Started ProductionServiceIntegrationTest in 5.583 seconds (process running for 68.214)
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.016 s -- in com.docegestao.service.ProductionServiceIntegrationTest
 [INFO] Running com.docegestao.service.ProductionServiceTest
-[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.677 s -- in com.docegestao.service.ProductionServiceTest
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.876 s -- in com.docegestao.service.ProductionServiceTest
 [INFO] Running com.docegestao.service.RecipeServiceTest
-[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.125 s -- in com.docegestao.service.RecipeServiceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.174 s -- in com.docegestao.service.RecipeServiceTest
 [INFO] Running com.docegestao.service.SaleServiceIntegrationTest
-2026-11-22T17:32:31.949-03:00  INFO 36044 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.docegestao.service.SaleServiceIntegrationTest]: SaleServiceIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-22T17:32:31.960-03:00  INFO 36044 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.service.SaleServiceIntegrationTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.477 s -- in com.docegestao.service.SaleServiceIntegrationTest
+2026-11-22T17:57:44.686-03:00  INFO 40448 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.docegestao.service.SaleServiceIntegrationTest]: SaleServiceIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-22T17:57:44.699-03:00  INFO 40448 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.service.SaleServiceIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.724 s -- in com.docegestao.service.SaleServiceIntegrationTest
 [INFO] Running com.docegestao.service.SaleServiceTest
-[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.378 s -- in com.docegestao.service.SaleServiceTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.380 s -- in com.docegestao.service.SaleServiceTest
 [INFO] Running com.docegestao.service.StockConcurrencyIntegrationTest
-2026-11-22T17:32:32.814-03:00  INFO 36044 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.docegestao.service.StockConcurrencyIntegrationTest]: StockConcurrencyIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-22T17:32:32.827-03:00  INFO 36044 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.service.StockConcurrencyIntegrationTest
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.756 s -- in com.docegestao.service.StockConcurrencyIntegrationTest
+2026-11-22T17:57:45.795-03:00  INFO 40448 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.docegestao.service.StockConcurrencyIntegrationTest]: StockConcurrencyIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-22T17:57:45.804-03:00  INFO 40448 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.docegestao.DoceGestaoApplication for test class com.docegestao.service.StockConcurrencyIntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.889 s -- in com.docegestao.service.StockConcurrencyIntegrationTest
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 60, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 61, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  01:40 min
-[INFO] Finished at: 2026-11-22T17:32:36-03:00
+[INFO] Total time:  01:29 min
+[INFO] Finished at: 2026-11-22T17:57:47-03:00
 [INFO] ------------------------------------------------------------------------
