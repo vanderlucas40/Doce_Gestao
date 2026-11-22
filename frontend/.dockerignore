@@ -1,0 +1,10 @@
+# Dependências e build locais não entram no contexto do Docker:
+# o Dockerfile roda `npm ci` no Linux, e copiar o node_modules do
+# Windows por cima trocaria os binários (esbuild/rollup) e deixaria o build lento.
+node_modules
+dist
+coverage
+.vite
+npm-debug.log*
+.env
+.env.*

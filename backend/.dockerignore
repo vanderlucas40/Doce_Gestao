@@ -1,0 +1,5 @@
+# O Dockerfile compila com Maven; o target/ local não deve entrar no contexto.
+target
+*.log
+.env
+.env.*
