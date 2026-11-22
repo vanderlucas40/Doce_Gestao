@@ -1,0 +1,88 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        // ── JM Confeitaria Design System ──────────────────────
+        "background":               "#fff8f6",
+        "surface":                  "#fff8f6",
+        "surface-bright":           "#fff8f6",
+        "surface-dim":              "#f8d1cb",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low":    "#fff0ee",
+        "surface-container":        "#ffe9e5",
+        "surface-container-high":   "#ffe2dd",
+        "surface-container-highest":"#ffdad4",
+        "surface-variant":          "#ffdad4",
+        "surface-tint":             "#924a3a",
+
+        "on-background":            "#2b1613",
+        "on-surface":               "#2b1613",
+        "on-surface-variant":       "#54433f",
+
+        "primary":                  "#924a3a",
+        "primary-container":        "#d27d6b",
+        "primary-fixed":            "#ffdad3",
+        "primary-fixed-dim":        "#ffb4a4",
+        "inverse-primary":          "#ffb4a4",
+        "on-primary":               "#ffffff",
+        "on-primary-container":     "#53190e",
+        "on-primary-fixed":         "#3b0802",
+        "on-primary-fixed-variant": "#753325",
+
+        "secondary":                "#516447",
+        "secondary-container":      "#d4e9c4",
+        "secondary-fixed":          "#d4e9c4",
+        "secondary-fixed-dim":      "#b8cdaa",
+        "on-secondary":             "#ffffff",
+        "on-secondary-container":   "#576a4c",
+        "on-secondary-fixed":       "#101f09",
+        "on-secondary-fixed-variant":"#3a4c31",
+
+        "tertiary":                 "#635e53",
+        "tertiary-container":       "#999386",
+        "tertiary-fixed":           "#e9e2d3",
+        "tertiary-fixed-dim":       "#cdc6b8",
+        "on-tertiary":              "#ffffff",
+        "on-tertiary-container":    "#302c22",
+        "on-tertiary-fixed":        "#1e1b13",
+        "on-tertiary-fixed-variant":"#4b463c",
+
+        "error":                    "#ba1a1a",
+        "error-container":          "#ffdad6",
+        "on-error":                 "#ffffff",
+        "on-error-container":       "#93000a",
+
+        "outline":                  "#87736e",
+        "outline-variant":          "#d9c1bc",
+        "inverse-surface":          "#422a26",
+        "inverse-on-surface":       "#ffedea",
+      },
+      borderRadius: {
+        DEFAULT: "0.25rem",
+        lg:      "0.5rem",
+        xl:      "0.75rem",
+        "2xl":   "1rem",
+        "3xl":   "1.5rem",
+        "4xl":   "2rem",
+        full:    "9999px",
+      },
+      fontFamily: {
+        headline: ["'Noto Serif'", "serif"],
+        body:     ["'Manrope'",    "sans-serif"],
+        label:    ["'Manrope'",    "sans-serif"],
+        sans:     ["'Manrope'",    "sans-serif"],
+        serif:    ["'Noto Serif'", "serif"],
+      },
+      boxShadow: {
+        "nav":  "0 8px 24px rgba(43,22,19,0.06)",
+        "nav-b":"0 -8px 24px rgba(43,22,19,0.06)",
+        "card": "0 2px 12px rgba(43,22,19,0.06)",
+        "modal":"0 24px 48px rgba(43,22,19,0.12)",
+      },
+    },
+  },
+  plugins: [],
+}

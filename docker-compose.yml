@@ -1,0 +1,77 @@
+version: "3.9"
+
+# ============================================================
+#  Doce Gestão v5 — Docker Compose
+#
+#  Uso:
+#    docker compose up --build        # primeira vez
+#    docker compose up -d             # subir em background
+#    docker compose down              # parar
+#    docker compose down -v           # parar e apagar banco
+#
+#  Acesse: http://localhost:3000
+#  API:    http://localhost:8080/api
+# ============================================================
+
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: docegestao-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: doce1234
+      MYSQL_DATABASE: docegestao
+      MYSQL_ROOT_HOST: '%'
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pdoce1234"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: docegestao-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/docegestao?useSSL=false&serverTimezone=America/Sao_Paulo&characterEncoding=UTF-8&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: doce1234
+      JWT_SECRET: "3d8f2a1c9b0e7f4d6a5c3e1b8d2f0a9c7e5b3d1f9a7c5e3b1d9f7a5c3e1b8d2"
+      JWT_EXPIRATION_MS: "86400000"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/api/stores || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 8
+      start_period: 40s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: docegestao-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:80"
+
+volumes:
+  db_data:
