@@ -6,6 +6,24 @@ Sistema web de gestão multi-loja para confeitarias: PDV, estoque, ficha técnic
 
 Repositório: https://github.com/vanderlucas40/Doce_Gestao
 
+## Entrega da Fase 3 — Implementação, Testes e Validação
+
+Versão entregue: tag [`v6.0.0`](https://github.com/vanderlucas40/Doce_Gestao/releases/tag/v6.0.0) · Equipe: Vandemberg Lucas Lima Melo e Ítalo de Farias Costa · Professor: Jeremias Araújo
+
+| O que | Onde |
+|---|---|
+| Plano de casos de teste (84 automatizados + roteiro manual, matriz de rastreabilidade) | [`TestCasePlan.md`](TestCasePlan.md) |
+| Defeitos encontrados e corrigidos (DEF-01 a DEF-21) | [`docs/Defeitos.md`](docs/Defeitos.md) |
+| Registro de Utilização da IA | [`docs/fase3/Registro_de_Utilização_da_IA.pdf`](docs/fase3/Registro_de_Utilização_da_IA.pdf) |
+| Evidências (saídas dos testes e capturas do roteiro manual) | [`docs/evidencias/`](docs/evidencias/README.md) |
+| Integração contínua (testes, build e subida do Docker a cada push) | [GitHub Actions](https://github.com/vanderlucas40/Doce_Gestao/actions) |
+| Checklist de entrega | [`docs/Checklist_Entrega_Fase3.md`](docs/Checklist_Entrega_Fase3.md) |
+| Artefatos das Fases 1 e 2 | [`docs/fase1`](docs/fase1) · [`docs/fase2`](docs/fase2) |
+
+**Resultado:** 84 testes automatizados (61 backend, 30 deles contra MySQL real via Testcontainers; 23 frontend), 100% aprovados localmente e no CI; roteiro manual CT-MAN-01 a 14 aprovado; 21 defeitos encontrados e corrigidos, cada um com teste de regressão ou reteste registrado.
+
+**Para avaliar rapidamente:** `cp .env.example .env`, preencher `JWT_SECRET` (ver [Como executar](#como-executar)), `docker compose up --build` e acessar http://localhost:3000 com `admin` / `admin123` ou `operador.centro` / `operador123`.
+
 ## Stack
 | Camada | Tecnologia |
 |---|---|
