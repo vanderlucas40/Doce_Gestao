@@ -18,19 +18,20 @@ services:
     container_name: docegestao-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: doce1234
-      MYSQL_DATABASE: docegestao
+      # Valores lidos do .env (copie de .env.example); nenhum segredo fica no repositório
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?defina MYSQL_ROOT_PASSWORD no .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-docegestao}
       MYSQL_ROOT_HOST: '%'
     command: >
       --default-authentication-plugin=mysql_native_password
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"   # só a própria máquina (dev local); o backend usa a rede interna
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pdoce1234"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -45,11 +46,15 @@ services:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/docegestao?useSSL=false&serverTimezone=America/Sao_Paulo&characterEncoding=UTF-8&allowPublicKeyRetrieval=true"
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: doce1234
-      JWT_SECRET: "3d8f2a1c9b0e7f4d6a5c3e1b8d2f0a9c7e5b3d1f9a7c5e3b1d9f7a5c3e1b8d2"
-      JWT_EXPIRATION_MS: "86400000"
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:?defina SPRING_DATASOURCE_URL no .env}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:?defina SPRING_DATASOURCE_PASSWORD no .env}
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no .env (openssl rand -base64 64)}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+      APP_SEED_ENABLED: ${APP_SEED_ENABLED:-true}
+      # Fuso da JVM: LocalDate.now() do painel e dos relatórios no horário de Brasília
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=America/Sao_Paulo"
+      TZ: America/Sao_Paulo
     ports:
       - "8080:8080"
     healthcheck:

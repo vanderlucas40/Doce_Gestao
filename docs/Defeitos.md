@@ -6,6 +6,7 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 |---|---|---|---|---|
 | DEF-01 | R01 | RF07, RF08, RN01 | Alta | Corrigido |
 | DEF-02 | R02 | RF01, RNF01 | Média | Corrigido |
+| DEF-03 | — | RF11, RF17, RNF10 | Média | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -29,3 +30,18 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
   - `client.js`: o redirecionamento em 401 ignora as rotas `/auth/*`, evitando recarregar a tela de login em loop.
 - **Commit:** `fix(security): 401 para token ausente ou expirado`
 - **Teste de regressão:** previsto no Step 8 (MockMvc): sem token = 401; token inválido = 401 com "Sessão expirada"; operador em rota ADMIN = 403; e no Step 11 (Vitest): 401 limpa o token e redireciona, exceto em `/auth/login`.
+
+## DEF-03 — Vendas após 21h contadas no dia seguinte
+
+- **Sintoma:** venda registrada às 22h de 20/11 aparece no painel e no relatório de 21/11.
+- **Causa:** o contêiner roda em UTC; `LocalDate.now()` e `LocalDateTime.now()` (data da venda, "hoje" do painel) usam o fuso da JVM, três horas à frente de Brasília.
+- **Correção:** `docker-compose.yml` define `JAVA_TOOL_OPTIONS=-Duser.timezone=America/Sao_Paulo` e `TZ` no backend.
+- **Commit:** `chore(config): endurece configuração`
+- **Verificação:** no contêiner, `docker compose exec backend date` e o log de inicialização da JVM mostram `America/Sao_Paulo`; venda às 22h aparece no painel do mesmo dia.
+
+## Endurecimento sem defeito funcional (Step 5)
+
+- **R05:** `JWT_SECRET` sem valor padrão no código e no compose; a API falha na inicialização se o segredo faltar ou tiver menos de 32 bytes. Senhas do banco lidas do `.env`. Seed (`admin123`, `operador123`) só com `APP_SEED_ENABLED=true`.
+- **R07:** `ddl-auto=validate`; o Flyway é a única fonte do esquema.
+- MySQL publicado só em `127.0.0.1:3306`.
+

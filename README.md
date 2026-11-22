@@ -14,13 +14,14 @@ Repositório: https://github.com/vanderlucas40/Doce_Gestao
 
 ## Como executar
 ```bash
-cp .env.example .env              # ajuste os valores
+cp .env.example .env              # ajuste os valores; gere o JWT_SECRET:
+#   openssl rand -base64 64        (cole o resultado em JWT_SECRET, numa linha só)
 docker compose up --build         # http://localhost:3000
 docker compose down -v            # para e apaga o banco
 ```
 Desenvolvimento local (MySQL em localhost:3306):
 ```bash
-cd backend  && mvn spring-boot:run          # API em http://localhost:8080/api
+cd backend  && JWT_SECRET=... APP_SEED_ENABLED=true mvn spring-boot:run   # API em http://localhost:8080/api
 cd frontend && npm install && npm run dev   # http://localhost:3000 (proxy /api -> :8080)
 ```
 
@@ -31,10 +32,14 @@ cd frontend && npm install && npm run dev   # http://localhost:3000 (proxy /api 
 | MySQL | 3306 |
 
 ## Variáveis de ambiente
-`MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRATION_MS` (ver `.env.example`).
+`MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRATION_MS`, `APP_SEED_ENABLED` (ver `.env.example`).
+
+- O `docker-compose.yml` não guarda segredos: lê tudo do `.env` e para com mensagem clara se faltar senha ou `JWT_SECRET`.
+- `JWT_SECRET` é obrigatório (mínimo 32 bytes); a API não sobe sem ele.
+- O esquema do banco vem só das migrações Flyway (`ddl-auto=validate`).
 
 ## Dados iniciais (somente desenvolvimento)
-Na primeira execução o `DataInitializer` cria lojas, produtos, insumos e dois usuários de exemplo (`admin` e `operador.centro`). Troque as senhas antes de qualquer uso real.
+Com `APP_SEED_ENABLED=true` (padrão no `.env.example`; desligado fora do Docker), na primeira execução o `DataInitializer` cria lojas, produtos, insumos e dois usuários de exemplo (`admin` e `operador.centro`). Troque as senhas antes de qualquer uso real.
 
 ## Estrutura
 ```

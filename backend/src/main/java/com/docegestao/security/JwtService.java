@@ -3,6 +3,7 @@ package com.docegestao.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,15 @@ public class JwtService {
 
     @Value("${jwt.expiration-ms}")
     private long expirationMs;
+
+    /** Falha na inicialização, com mensagem clara, se o segredo for curto demais para HS256. */
+    @PostConstruct
+    void validateSecret() {
+        if (secret == null || secret.getBytes(StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalStateException(
+                "JWT_SECRET ausente ou curto (mínimo 32 bytes). Gere com: openssl rand -base64 64");
+        }
+    }
 
     // ─── Geração ─────────────────────────────────────────────
 
