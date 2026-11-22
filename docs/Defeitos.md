@@ -15,6 +15,7 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 | DEF-09 | R04 | RN06, RNF06 | Alta | Corrigido |
 | DEF-10 | — | RF01, RF02, RF04 | Alta | Corrigido |
 | DEF-11 | — | RF09, RN06 | Baixa | Corrigido |
+| DEF-12 | R09 | RNF06, RNF07 | Média | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -116,6 +117,14 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 - **Causa:** o limite de estoque só era conferido ao somar a um item que já estava no carrinho.
 - **Correção:** regras do carrinho extraídas para `utils/cart.js` (funções puras) com o limite conferido também na primeira inclusão; total arredondado a centavos.
 - **Testes:** CT-FE-01 a CT-FE-06.
+
+## DEF-12 — CI verde com os testes de integração ignorados
+
+- **Sintoma:** na primeira execução do GitHub Actions, os três jobs ficaram verdes, mas o backend reportou `Tests run: 59, Skipped: 28`: todos os testes com MySQL real foram pulados.
+- **Causa:** o Docker Engine 29 dos runners exige API ≥ 1.44; o Testcontainers 1.19.x (versão gerenciada pelo Spring Boot 3.2.5) pede a API 1.32 e é recusado (`client version 1.32 is too old`). Com `disabledWithoutDocker = true`, os testes viraram *skip* em vez de falha. Na máquina da equipe passava porque o Docker Desktop ainda aceitava a API antiga.
+- **Correção:** `testcontainers.version` fixado em 1.21.4 no `pom.xml`; o CI passa a falhar se qualquer teste for ignorado; actions atualizadas para v5.
+- **Commit:** `fix(ci): testes de integração rodam no Docker 29`
+- **Verificação:** execução do CI com `Tests run: 59, Skipped: 0`.
 
 ## Melhorias sem defeito funcional (Step 10)
 

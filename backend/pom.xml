@@ -21,6 +21,10 @@
         <java.version>21</java.version>
         <!-- Sobrescreve a versão gerenciada pelo Spring Boot; 1.18.34 suporta Java 21 -->
         <lombok.version>1.18.34</lombok.version>
+        <!-- Docker Engine 29 exige API >= 1.44; o Testcontainers do Spring Boot 3.2.5 (1.19.x)
+             pede 1.32 e é recusado, fazendo os testes de integração serem ignorados.
+             1.21.4 é a primeira versão 1.x compatível (DEF-12). -->
+        <testcontainers.version>1.21.4</testcontainers.version>
     </properties>
 
     <dependencies>
