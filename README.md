@@ -6,7 +6,7 @@ Sistema web de gestão multi-loja para confeitarias: PDV, estoque, ficha técnic
 
 Repositório: https://github.com/vanderlucas40/Doce_Gestao
 
-## Entrega da Fase 3 — Implementação, Testes e Validação
+## Entrega da Fase 3 — Desenvolvimento, Integração e Garantia da Qualidade
 
 Versão entregue: tag [`v6.0.0`](https://github.com/vanderlucas40/Doce_Gestao/releases/tag/v6.0.0) · Equipe: Vandemberg Lucas Lima Melo e Ítalo de Farias Costa · Professor: Jeremias Araújo
 
@@ -14,7 +14,7 @@ Versão entregue: tag [`v6.0.0`](https://github.com/vanderlucas40/Doce_Gestao/re
 |---|---|
 | Plano de casos de teste (84 automatizados + roteiro manual, matriz de rastreabilidade) | [`TestCasePlan.md`](TestCasePlan.md) |
 | Defeitos encontrados e corrigidos (DEF-01 a DEF-21) | [`docs/Defeitos.md`](docs/Defeitos.md) |
-| Registro de Utilização da IA | [`docs/fase3/Registro_de_Utilização_da_IA.pdf`](docs/fase3/Registro_de_Utilização_da_IA.pdf) |
+| Registro de Utilização da IA | [`Registro_de_Utilização_da_IA.pdf`](Registro_de_Utilização_da_IA.pdf) (raiz do projeto, ao lado do `TestCasePlan.md`) |
 | Evidências (saídas dos testes e capturas do roteiro manual) | [`docs/evidencias/`](docs/evidencias/README.md) |
 | Integração contínua (testes, build e subida do Docker a cada push) | [GitHub Actions](https://github.com/vanderlucas40/Doce_Gestao/actions) |
 | Checklist de entrega | [`docs/Checklist_Entrega_Fase3.md`](docs/Checklist_Entrega_Fase3.md) |
@@ -88,7 +88,7 @@ docs/       Artefatos das macro entregas (PDFs): fase1/, fase2/
 |---|---|
 | 1 — Concepção e Requisitos ([docs/fase1](docs/fase1)) | 01 Documento de Visão · 02 Especificação de Requisitos · 03 Histórias de Usuário · 04 Product Backlog · 05 Plano de Utilização de IA |
 | 2 — Arquitetura e Modelagem ([docs/fase2](docs/fase2)) | 01 Documento de Arquitetura · 02 Diagramas de Modelagem · 03 Modelo de Dados · 04 Protótipos de Interface · 05 Estrutura Técnica · Planejamento e Checklist (interno) |
-| 3 — Implementação e Testes | [`TestCasePlan.md`](TestCasePlan.md) (76 casos automatizados + roteiro manual) · [`docs/Defeitos.md`](docs/Defeitos.md) · [Registro de Utilização da IA](docs/fase3/Registro_de_Utilização_da_IA.pdf) |
+| 3 — Desenvolvimento, Integração e Garantia da Qualidade | [`TestCasePlan.md`](TestCasePlan.md) (84 casos automatizados + roteiro manual) · [`docs/Defeitos.md`](docs/Defeitos.md) · [`Registro_de_Utilização_da_IA.pdf`](Registro_de_Utilização_da_IA.pdf) |
 
 Os identificadores de risco (R01–R10) seguem o Documento de Arquitetura (fase 2, artefato 01).
 

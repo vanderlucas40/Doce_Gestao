@@ -31,7 +31,7 @@ Marque cada item antes do envio (prazo: **03/12/2026**). Responsável e data aju
 | OK | Item | Critério de pronto | Resp. | Data |
 |---|---|---|---|---|
 | [x] | Artefatos das Fases 1 e 2 | `docs/fase1`, `docs/fase2` com os nomes do enunciado | | 22/11 |
-| [x] | Registro de Utilização da IA | `docs/fase3/Registro_de_Utilização_da_IA.pdf` | | 22/11 |
+| [x] | Registro de Utilização da IA | `Registro_de_Utilização_da_IA.pdf` (raiz do projeto) | | 22/11 |
 | [x] | Revisão do Registro de IA | Nome da fase conforme o enunciado; participação de cada integrante registrada (v1.4) | | 22/11 |
 | [ ] | README final | Como executar, testar, credenciais de demonstração e link do CI conferidos por quem não escreveu | | |
 

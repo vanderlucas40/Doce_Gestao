@@ -3,8 +3,8 @@
 | Item | Informação |
 |---|---|
 | Projeto | Doce Gestão — sistema de gestão multi-loja para confeitarias |
-| Fase | Fase 3 — Implementação, Testes e Validação |
-| Versão / data | 1.4 — 22/11/2026 |
+| Fase | Phase 3 — Macro Entrega 3: Desenvolvimento, Integração e Garantia da Qualidade |
+| Versão / data | 1.5 — 22/11/2026 |
 | Equipe | Vandemberg Lucas Lima Melo (2112090004) · Ítalo de Farias Costa (2515050012) |
 | Professor | Jeremias Araújo |
 | Repositório | https://github.com/vanderlucas40/Doce_Gestao |
