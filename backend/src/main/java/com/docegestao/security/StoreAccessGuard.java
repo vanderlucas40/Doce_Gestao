@@ -3,7 +3,7 @@ package com.docegestao.security;
 import com.docegestao.entity.User;
 import com.docegestao.enums.Role;
 import com.docegestao.repository.UserRepository;
-import com.docegestao.service.BusinessException;
+import org.springframework.security.access.AccessDeniedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,8 @@ public class StoreAccessGuard {
     private final UserRepository userRepository;
 
     /**
-     * Lança BusinessException (403) se o usuário não puder acessar storeId.
+     * Lança AccessDeniedException (HTTP 403 pelo GlobalExceptionHandler) se o usuário
+     * não puder acessar storeId. Antes lançava BusinessException, que virava 422 (DEF-08).
      */
     public void check(Long storeId) {
         var auth     = SecurityContextHolder.getContext().getAuthentication();
@@ -33,7 +34,7 @@ public class StoreAccessGuard {
         if (user.getRole() == Role.ADMIN) return;
 
         if (user.getStore() == null || !user.getStore().getId().equals(storeId)) {
-            throw new BusinessException("Acesso negado: você não tem permissão para esta loja");
+            throw new AccessDeniedException("Acesso negado: você não tem permissão para esta loja");
         }
     }
 

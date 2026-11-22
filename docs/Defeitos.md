@@ -11,6 +11,7 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 | DEF-05 | — | RF14, RN13 | Média | Corrigido |
 | DEF-06 | — | RF14, RN11 | Média | Corrigido |
 | DEF-07 | — | RF20 | Alta | Corrigido |
+| DEF-08 | R05 | RN01, RNF02 | Baixa | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -78,4 +79,12 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 - **Segunda causa (achada pelo CT-PRO-15):** a consulta não buscava `b.store`, e `FornadaResponse.from()` lia o nome da loja fora da sessão (`LazyInitializationException`). Na API isso ficava mascarado pelo open-in-view do Spring; fora de uma requisição web (teste, tarefa agendada) falhava.
 - **Correção complementar:** `JOIN FETCH b.store` nas três consultas de fornada e `@Transactional(readOnly = true)` em `findByStore` e `findById`.
 - **Teste:** CT-PRO-15 (histórico lido do MySQL real).
+
+## DEF-08 — Acesso a outra loja respondia 422 em vez de 403
+
+- **Sintoma:** operador que chamava `/stores/{outra loja}/...` recebia HTTP 422 (regra de negócio), não 403 (sem permissão); o cliente não distinguia os dois casos.
+- **Causa:** `StoreAccessGuard` lançava `BusinessException`; o comentário do próprio código dizia 403.
+- **Correção:** o guard lança `AccessDeniedException`, já tratada como 403 em JSON pelo `GlobalExceptionHandler`. O acesso continua negado; só o código HTTP muda.
+- **Commit:** `fix(security): acesso a outra loja responde 403`
+- **Testes:** CT-SEG-07, CT-SEG-08.
 
