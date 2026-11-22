@@ -261,4 +261,3 @@ Durante a execução, os testes revelaram defeitos que a revisão de código nã
 | Token JWT em `localStorage` (R07) | Exposto a XSS | CSP no Nginx; cookie httpOnly em versão futura |
 | CORS fixo em localhost (R09) | Quebra em outro domínio | Tornar configurável por variável de ambiente |
 | Instância única de API e banco (R10) | Sem alta disponibilidade | Aceito para o escopo acadêmico |
-
