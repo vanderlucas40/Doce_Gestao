@@ -10,19 +10,20 @@ Marque cada item antes do envio (prazo: **03/12/2026**). Responsável e data aju
 | [x] | Migrações versionadas | V1–V4 aplicadas sobre banco existente sem perda (V3, V4 validadas) | | 22/11 |
 | [x] | Segredos fora do repositório | `.env` só local; `JWT_SECRET` obrigatório; `.env.example` atualizado | | 22/11 |
 | [x] | Pipeline de CI verde | Aba *Actions*: Backend (59, `Skipped: 0`), Frontend e Smoke test verdes; conferir de novo no último commit | | 22/11 |
-| [ ] | Teste de clone limpo | Pasta nova: `git clone` → `cp .env.example .env` (com `JWT_SECRET`) → `docker compose up --build` → login `admin` | | |
+| [x] | Teste de clone limpo | Pasta nova: `git clone` → `cp .env.example .env` (com `JWT_SECRET`) → `docker compose up --build` → login `admin` | | |
 | [x] | Tag da versão | `v6.0.0` no commit `12ebb35` validado pelo CI; se houver commits depois, mover a tag ou criar `v6.0.1`; release no GitHub (opcional) | | 22/11 |
 
 ## 2. Testes
 
 | OK | Item | Critério de pronto | Resp. | Data |
 |---|---|---|---|---|
-| [x] | Testes automatizados do backend | `mvn test`: 59/59 (31 unitários, 28 com MySQL real) | | 22/11 |
-| [x] | Testes automatizados do frontend | `npm test`: 19/19 | | 22/11 |
+| [ ] | Testes automatizados do backend | `mvn test`: 60/60, `Skipped: 0` (após DEF-15) | | |
+| [x] | Testes automatizados do frontend | `npm test`: 23/23 (após DEF-14 a 20) | | 22/11 |
 | [x] | Plano de casos de teste | `TestCasePlan.md` com cenários, resultado esperado, critério, evidências e defeitos | | 22/11 |
 | [x] | Roteiro manual CT-MAN-01 a 05 | Executados e marcados no `TestCasePlan.md` | | 22/11 |
-| [ ] | Roteiro manual CT-MAN-06 a 14 | Executados; ⬜ trocado por ✅ (ou DEF-NN aberto) | | |
-| [ ] | Evidências | `docs/evidencias/`: saída final de `mvn test` e `npm test`, capturas dos fluxos (operador, admin, padeiro), 375 px e 1280 px | | |
+| [x] | Roteiro manual CT-MAN-06 a 14 | 12 ✅, CT-MAN-09 ❌ → DEF-14 a 20 corrigidos | | 22/11 |
+| [ ] | Reteste do CT-MAN-09 | 375 px: ☰ abre o menu e chega ao Estoque; Fornada mostra a quantidade; 1280 px sem corte | | |
+| [x] | Evidências | `docs/evidencias/`: 32 capturas + índice; `mvn-test.txt` e `npm-test.txt` | | 22/11 |
 
 ## 3. Documentação
 

@@ -4,7 +4,7 @@
 |---|---|
 | Projeto | Doce Gestão — sistema de gestão multi-loja para confeitarias |
 | Fase | Fase 3 — Implementação, Testes e Validação |
-| Versão / data | 1.1 — 22/11/2026 |
+| Versão / data | 1.2 — 22/11/2026 |
 | Equipe | Vandemberg Lucas Lima Melo (2112090004) · Ítalo de Farias Costa (2515050012) |
 | Professor | Jeremias Araújo |
 | Repositório | https://github.com/vanderlucas40/Doce_Gestao |
@@ -30,8 +30,8 @@ Verificar que o sistema cumpre os requisitos **Must** e **Should** da Fase 1, co
 
 **Como executar:**
 ```bash
-cd backend  && mvn test    # 59 casos; os de integração exigem Docker ativo
-cd frontend && npm test    # 19 casos
+cd backend  && mvn test    # 60 casos; os de integração exigem Docker ativo
+cd frontend && npm test    # 23 casos
 ```
 
 ## 3. Critérios de aceitação
@@ -105,7 +105,7 @@ cd frontend && npm test    # 19 casos
 | CT-EST-04 | Ajustes manuais gravam motivo, autor e saldo anterior/novo (R10) | API (MockMvc + MySQL real) | RF07, RF08 | — | `MovementsAndPagingApiIntegrationTest#ajusteGravaMovimentacao` | ✅ Passou |
 | CT-EST-05 | Operador não vê movimentações de outra loja (403) | API (MockMvc + MySQL real) | RN01, RNF02 | DEF-08 | `MovementsAndPagingApiIntegrationTest#movimentacoesOutraLoja` | ✅ Passou |
 
-### 4.5 Acesso e segurança (14 casos)
+### 4.5 Acesso e segurança (15 casos)
 
 | ID | Cenário e resultado esperado | Tipo | Requisitos | Defeito | Implementação | Resultado |
 |---|---|---|---|---|---|---|
@@ -123,6 +123,7 @@ cd frontend && npm test    # 19 casos
 | CT-SEG-12 | Só o administrador cria insumo | API (MockMvc + MySQL real) | RF06, RN02 | — | `SecurityApiIntegrationTest#criarInsumo` | ✅ Passou |
 | CT-SEG-13 | Ficha técnica: operador consulta, só o administrador altera | API (MockMvc + MySQL real) | RF13, RN02 | — | `SecurityApiIntegrationTest#fichaTecnica` | ✅ Passou |
 | CT-SEG-14 | Gestão de usuários é exclusiva do administrador | API (MockMvc + MySQL real) | RF19, RN02 | — | `SecurityApiIntegrationTest#usuarios` | ✅ Passou |
+| CT-SEG-15 | Id de loja não numérico na URL responde 400 em português, não 500 | API (MockMvc + MySQL real) | RNF05 | DEF-15 | `SecurityApiIntegrationTest#idDeLojaInvalido` | ✅ Passou |
 
 ### 4.6 Cadastros (3 casos)
 
@@ -132,7 +133,7 @@ cd frontend && npm test    # 19 casos
 | CT-CAD-02 | Preço zero é recusado com o campo indicado | API (MockMvc + MySQL real) | RF05, RN04, RNF05 | — | `SecurityApiIntegrationTest#precoZero` | ✅ Passou |
 | CT-CAD-03 | Excluir produto apenas o desativa e o tira da listagem | API (MockMvc + MySQL real) | RF05, RN05 | — | `SecurityApiIntegrationTest#desativarProduto` | ✅ Passou |
 
-### 4.7 Frontend (19 casos)
+### 4.7 Frontend (23 casos)
 
 | ID | Cenário e resultado esperado | Tipo | Requisitos | Defeito | Implementação | Resultado |
 |---|---|---|---|---|---|---|
@@ -155,6 +156,10 @@ cd frontend && npm test    # 19 casos
 | CT-FE-17 | Sessão é restaurada ao recarregar a página; expirada é descartada | Unitário (Vitest/jsdom) | RF01 | — | `useAuth.test.jsx` | ✅ Passou |
 | CT-FE-18 | Alta, queda e estabilidade com percentual arredondado | Unitário (Vitest/jsdom) | RF11 | DEF-13 | `trend.test.js` | ✅ Passou |
 | CT-FE-19 | Sem movimento ontem não há percentual (nada inventado na tela) | Unitário (Vitest/jsdom) | RF11 | DEF-13 | `trend.test.js` | ✅ Passou |
+| CT-FE-20 | Quantidades com vírgula, até 3 casas e sem arredondar para 1 casa | Unitário (Vitest/jsdom) | RNF10, RF08 | DEF-16 | `format.test.js` | ✅ Passou |
+| CT-FE-21 | Data completa dd/mm/aaaa para o CSV | Unitário (Vitest/jsdom) | RNF10, RF18 | DEF-20 | `format.test.js` | ✅ Passou |
+| CT-FE-22 | Com enabled=false não chama a API (loja ainda não carregada) | Unitário (Vitest/jsdom) | RNF05 | DEF-15 | `useFetch.test.jsx` | ✅ Passou |
+| CT-FE-23 | Busca quando a loja chega e ignora resposta antiga que chega depois | Unitário (Vitest/jsdom) | RNF05 | DEF-15 | `useFetch.test.jsx` | ✅ Passou |
 
 ## 5. Roteiro de aceitação manual
 
@@ -162,22 +167,24 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 
 | ID | Cenário | Passos | Resultado esperado | Requisitos | Resultado |
 |---|---|---|---|---|---|
-| CT-MAN-01 | Subida completa com um comando | `cp .env.example .env` (com `JWT_SECRET`), `docker compose up --build` | 3 contêineres; backend `Healthy`; Flyway aplica V1–V4; `validate` sem erro | RNF07, RNF08 | ✅ 22/11/2026 |
-| CT-MAN-02 | Migração sobre banco existente | `docker compose up --build` sem `-v` após V3 e V4 | Dados preservados; backend `Healthy` | RNF08 | ✅ 22/11/2026 |
-| CT-MAN-03 | Login do administrador | Entrar com `admin` | Menus completos (Cadastros, Equipe, Relatórios) | RF01, RF02 | ✅ 22/11/2026 |
-| CT-MAN-04 | Sessão após recarregar | Logado, pressionar F5 | Continua logado, com perfil e loja | RF01 | ✅ 22/11/2026 |
-| CT-MAN-05 | Produto sem estoque no PDV | Tentar incluir produto com estoque 0 | Item não entra no carrinho | RF09, RN06 | ✅ 22/11/2026 |
-| CT-MAN-06 | Fluxo do operador | `operador.centro` → PDV → 2 produtos → finalizar | Venda registrada, estoque baixado, venda nas "últimas do dia" | RF09, RF10, RF04 | ⬜ Pendente |
-| CT-MAN-07 | Ajuste de estoque pelo operador | Estoque → ajustar com motivo "Avaria / Perda" | Salvo; movimentação em `/api/stores/1/stock-movements` | RF07, RF08 | ⬜ Pendente |
-| CT-MAN-08 | Fluxo do padeiro | Fornada → 2 sabores → conferir resumo → informar desvio → registrar | Resumo consolidado; insumos abatidos; fornada no histórico | RF14, RF15, RF16, RF20 | ⬜ Pendente |
-| CT-MAN-09 | Responsividade | Telas PDV, Estoque, Fornada em 375 px e 1280 px | Barra inferior no celular; menu lateral no desktop | RNF04 | ⬜ Pendente |
-| CT-MAN-10 | Navegadores | Login + venda no Chrome, Firefox e Edge atuais | Mesmo comportamento | RNF09 | ⬜ Pendente |
-| CT-MAN-11 | Desempenho | Aba Rede: PDV, Estoque, Dashboard com dados de exemplo | Respostas da API em até 2 s | RNF03 | ⬜ Pendente |
-| CT-MAN-12 | Relatório e CSV | Relatórios → 7 dias → exportar CSV | Valores em R$, datas dd/mm/aaaa, CSV abre em planilha | RF17, RF18, RNF10 | ⬜ Pendente |
-| CT-MAN-13 | Alertas de estoque baixo | Ajustar um produto para menos de 30% da capacidade e um insumo abaixo do mínimo; abrir o Dashboard | Os dois aparecem nos alertas | RF12, RN08 | ⬜ Pendente |
-| CT-MAN-14 | Intervalo do relatório | Relatórios com data inicial após a final; depois intervalo de 400 dias | Mensagens: data inicial posterior à final; máximo de 366 dias | RN14 | ⬜ Pendente |
+| CT-MAN-01 | Subida completa com um comando (clone limpo) | Pasta nova: `git clone` → `.env` com `JWT_SECRET` → `docker compose up -d --build --wait` | 3 contêineres; backend `Healthy`; Flyway aplica V1–V4; `validate` sem erro | RNF07, RNF08 | ✅ 22/11 (CI repete a cada push) |
+| CT-MAN-02 | Migração sobre banco existente | `docker compose up --build` sem `-v` após V3 e V4 | Dados preservados; backend `Healthy` | RNF08 | ✅ 22/11 |
+| CT-MAN-03 | Login do administrador | Entrar com `admin` | Menus completos (Cadastros, Equipe, Relatórios) | RF01, RF02 | ✅ 22/11 |
+| CT-MAN-04 | Sessão após recarregar | Logado, pressionar F5 | Continua logado, com perfil e loja | RF01 | ✅ 22/11 |
+| CT-MAN-05 | Produto sem estoque no PDV | Tentar incluir produto com estoque 0 | Item não entra no carrinho | RF09, RN06 | ✅ 22/11 |
+| CT-MAN-06 | Fluxo do operador | `operador.centro` → PDV → vender Bolo de Cenoura e Brigadeiro | Venda registrada; estoque 3→2 e 12→10; Dashboard com R$ 81,00 e sem percentual (sem vendas ontem) | RF09, RF10, RF04, RF11 | ✅ 22/11 |
+| CT-MAN-07 | Ajuste de estoque pelo operador | Estoque → Açúcar 9 → 8, motivo “Avaria / Perda” | Salvo sem 403; movimentação com motivo, autor e saldos | RF07, RF08 | ✅ 22/11 (achado DEF-15) |
+| CT-MAN-08 | Fluxo do padeiro | Fichas técnicas → fornada Cenoura 2 + Brigadeiro 3 → 2ª fornada com desvio da farinha (0,35) | Resumo consolidado; insumos abatidos pelo real; produtos somados; histórico | RF13–RF16, RF20, RN09–RN13 | ✅ 22/11 (achados DEF-16, DEF-17) |
+| CT-MAN-09 | Responsividade | PDV, Estoque, Fornada em 375 px e 1280 px | Barra inferior no celular com acesso a todas as telas; menu lateral no desktop | RNF04 | ❌ 22/11 → DEF-14, 18, 19 corrigidos; ⬜ reteste |
+| CT-MAN-10 | Navegadores | Login + venda + Estoque no Chrome e no Edge | Mesmo comportamento | RNF09 | ✅ 22/11 (Chrome, Edge) |
+| CT-MAN-11 | Desempenho | Aba Rede: PDV, Estoque, Dashboard | Respostas da API em até 2 s | RNF03 | ✅ 22/11 (máx. 542 ms) |
+| CT-MAN-12 | Relatório e CSV | Relatórios → 7 dias → exportar CSV | Valores em R$, CSV legível no Excel | RF17, RF18, RNF10 | ✅ 22/11 (achado DEF-20) |
+| CT-MAN-13 | Alertas de estoque baixo | Dashboard da Loja Centro | Produtos abaixo de 30% e insumos abaixo do mínimo listados | RF12, RN08 | ✅ 22/11 (5 itens) |
+| CT-MAN-14 | Intervalo do relatório | Intervalo de 386 dias; data inicial após a final | Mensagens de intervalo máximo e de data inicial posterior | RN14 | ✅ 22/11 |
 
-> Para os casos pendentes, registrar data, navegador e captura de tela em `docs/evidencias/` e trocar ⬜ por ✅ (ou abrir DEF-NN).
+**Defeitos achados no roteiro:** DEF-14 a DEF-20, todos corrigidos no commit `fix(frontend): defeitos do roteiro manual`. O CT-MAN-09 deve ser repetido após a correção (375 px: ☰ abre o menu; Fornada mostra o campo de quantidade).
+
+> Capturas de cada caso em [`docs/evidencias/`](docs/evidencias/README.md).
 
 ## 6. Matriz de rastreabilidade (requisito → casos automatizados)
 
@@ -190,7 +197,7 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | RF05 | CT-CAD-02, CT-CAD-03, CT-SEG-11 | 3 |
 | RF06 | CT-SEG-12 | 1 |
 | RF07 | CT-EST-01, CT-EST-04, CT-SEG-05 | 3 |
-| RF08 | CT-EST-02, CT-EST-04, CT-SEG-06 | 3 |
+| RF08 | CT-EST-02, CT-EST-04, CT-FE-20, CT-SEG-06 | 4 |
 | RF09 | CT-FE-01, CT-FE-02, CT-FE-03, CT-FE-04, CT-FE-05, CT-VEN-01, CT-VEN-04, CT-VEN-05 | 8 |
 | RF10 | CT-VEN-01, CT-VEN-03, CT-VEN-09, CT-VEN-10, CT-VEN-12, CT-VEN-14 | 6 |
 | RF11 | CT-FE-18, CT-FE-19, CT-VEN-07, CT-VEN-08 | 4 |
@@ -198,6 +205,7 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | RF14 | CT-PRO-04, CT-PRO-15 | 2 |
 | RF15 | CT-PRO-01, CT-PRO-02, CT-PRO-03 | 3 |
 | RF16 | CT-PRO-06, CT-PRO-15 | 2 |
+| RF18 | CT-FE-21 | 1 |
 | RF19 | CT-SEG-14 | 1 |
 | RF20 | CT-PRO-15 | 1 |
 | RN01 | CT-EST-05, CT-SEG-05, CT-SEG-06, CT-SEG-07, CT-SEG-08, CT-SEG-09 | 6 |
@@ -215,11 +223,11 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | RNF01 | CT-FE-08, CT-FE-15, CT-SEG-01, CT-SEG-02, CT-SEG-04 | 5 |
 | RNF02 | CT-EST-05, CT-SEG-07, CT-SEG-08 | 3 |
 | RNF03 | CT-VEN-15, CT-VEN-16 | 2 |
-| RNF05 | CT-CAD-02, CT-FE-11, CT-PRO-05, CT-SEG-03, CT-VEN-11 | 5 |
+| RNF05 | CT-CAD-02, CT-FE-11, CT-FE-22, CT-FE-23, CT-PRO-05, CT-SEG-03, CT-SEG-15, CT-VEN-11 | 8 |
 | RNF06 | CT-EST-02, CT-EST-03, CT-PRO-14, CT-PRO-16, CT-VEN-06, CT-VEN-13 | 6 |
-| RNF10 | CT-FE-07 | 1 |
+| RNF10 | CT-FE-07, CT-FE-20, CT-FE-21 | 3 |
 
-**Requisitos Must/Should sem caso automatizado:** RF12, RF17, RF18, RNF04, RNF07, RNF08, RNF09, RN08, RN14 — cobertos pelo roteiro manual da seção 5 (CT-MAN-06 a CT-MAN-14). RNF07 e RNF08: CT-MAN-01 e CT-MAN-02.
+**Requisitos Must/Should sem caso automatizado:** RF12, RF17, RNF04, RNF07, RNF08, RNF09, RN08, RN14 — cobertos pelo roteiro manual da seção 5 (CT-MAN-06 a CT-MAN-14). RNF07 e RNF08: CT-MAN-01 e CT-MAN-02.
 
 ## 7. Defeitos encontrados e corrigidos
 
@@ -238,8 +246,15 @@ Executado com `docker compose up --build` em `http://localhost:3000`, dados de d
 | DEF-11 | Carrinho aceitava produto sem estoque | — | RF09, RN06 | Baixa | Corrigido | CT-FE-02, CT-FE-03 |
 | DEF-12 | CI verde com os testes de integração ignorados | R09 | RNF06, RNF07 | Média | Corrigido | CI: passo que falha com teste ignorado (Skipped: 0 no run do commit 12ebb35) |
 | DEF-13 | Dashboard exibia variações inventadas | — | RF11 | Média | Corrigido | CT-VEN-07, CT-VEN-08, CT-FE-18, CT-FE-19 |
+| DEF-14 | Menu do topo cortava “Equipe” e espremia a tela entre 768 e 1280 px | — | RNF04 | Baixa | Corrigido | Reteste manual do CT-MAN-09 |
+| DEF-15 | Telas chamavam /stores/undefined e o backend respondia 500 | — | RNF05 | Média | Corrigido | CT-FE-22, CT-FE-23, CT-SEG-15 |
+| DEF-16 | Quantidades com ponto e arredondadas para 1 casa (e gravadas assim no ajuste) | — | RNF10, RF07, RF08 | Média | Corrigido | CT-FE-20 |
+| DEF-17 | Histórico de fornadas sem o consumo sugerido | — | RF20 | Baixa | Corrigido | Reteste manual do CT-MAN-08 (histórico) |
+| DEF-18 | Campo de quantidade sumia na Fornada a 375 px | — | RNF04, RF14 | Média | Corrigido | Reteste manual do CT-MAN-09 (375 px) |
+| DEF-19 | Celular sem acesso a Estoque, Relatórios e Equipe | — | RNF04, RF07, RF08, RF17 | Alta | Corrigido | Reteste manual do CT-MAN-09 (375 px) |
+| DEF-20 | CSV com data sem ano; resultado antigo sob intervalo inválido | — | RNF10, RF18 | Baixa | Corrigido | CT-FE-21 |
 
-Total: 13 defeitos, todos corrigidos; nenhum defeito Alta aberto.
+Total: 20 defeitos, todos corrigidos; nenhum defeito Alta aberto.
 
 ## 8. Evidências de execução
 
@@ -252,12 +267,14 @@ Total: 13 defeitos, todos corrigidos; nenhum defeito Alta aberto.
 | 22/11/2026 | Backend: + movimentações e paginação (Step 10) | `mvn test` | 59/59 ✅ |
 | 22/11/2026 | Frontend (Step 11) | `npm test` | 17/17 ✅ |
 | 22/11/2026 | Aceitação: CT-MAN-01 a 05 | `docker compose up --build` + navegador | ✅ |
+| 22/11/2026 | Clone limpo + roteiro CT-MAN-06 a 14 | Pasta nova, banco novo, Chrome e Edge | 12 ✅, 1 ❌ (CT-MAN-09); 7 defeitos (DEF-14 a 20) |
 | 22/11/2026 | CI, 1º run (commit `2e2badf`) | GitHub Actions | ⚠️ verde, mas 28 testes ignorados (DEF-12) |
 | 22/11/2026 | Backend com Testcontainers 1.21.4 | `mvn test` (Docker Desktop 29.9.3) | 59/59, 0 ignorados ✅ |
 | 22/11/2026 | CI (commit `12ebb35`, tag `v6.0.0`) | GitHub Actions: backend, frontend, smoke test | 59/59 + 17/17 + compose `Healthy` ✅ |
 | 22/11/2026 | Frontend com variação do Dashboard (DEF-13) | `npm test` | 19/19 ✅ |
+| 22/11/2026 | Correções DEF-14 a 20 | `npm test` (ambiente da IA) | 23/23 ✅; backend 60 casos a confirmar com `mvn test` e no CI |
 
-**Total automatizado: 78 casos (59 backend + 19 frontend), 100% aprovados, executados também no CI a cada push.** Os relatórios detalhados ficam em `backend/target/surefire-reports/` após cada execução; recomenda-se anexar a saída final de `mvn test` e `npm test` em `docs/evidencias/`.
+**Total automatizado: 83 casos (60 backend + 23 frontend), executados também no CI a cada push.** Os relatórios detalhados ficam em `backend/target/surefire-reports/` após cada execução; recomenda-se anexar a saída final de `mvn test` e `npm test` em `docs/evidencias/`.
 
 Durante a execução, os testes revelaram defeitos que a revisão de código não havia apontado: `PotentialStubbingProblem` no próprio teste (ajustado), `LazyInitializationException` no histórico de fornadas (DEF-07, segunda causa) e a decodificação do JWT no frontend (DEF-10). A revisão do log do primeiro run do CI revelou que um resultado verde escondia 28 testes ignorados (DEF-12).
 
@@ -266,6 +283,8 @@ Durante a execução, os testes revelaram defeitos que a revisão de código nã
 | Item | Situação | Encaminhamento |
 |---|---|---|
 | Categoria de produto | Botões falsos removidos do PDV (não filtravam nada) | Evolução futura: coluna de categoria no produto e filtro no PDV |
+| Credenciais de demonstração no login | Sempre visíveis, por decisão da equipe (facilita a avaliação) | Em uso real: `APP_SEED_ENABLED=false` e troca das senhas |
+| Dependências de desenvolvimento (vite 5, vitest 2) | `npm audit` aponta vulnerabilidades só em ferramentas de build/teste; nada vai para o bundle servido pelo Nginx | Atualizar para vite 8 / vitest 5 após a entrega (mudança de versão principal) |
 | Token JWT em `localStorage` (R07) | Exposto a XSS | CSP no Nginx; cookie httpOnly em versão futura |
 | CORS fixo em localhost (R09) | Quebra em outro domínio | Tornar configurável por variável de ambiente |
 | Instância única de API e banco (R10) | Sem alta disponibilidade | Aceito para o escopo acadêmico |
