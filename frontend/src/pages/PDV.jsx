@@ -1,4 +1,5 @@
 import { useState, useCallback }                                    from 'react'
+import { useAuth }                                                   from '../hooks/useAuth'
 import { useStore }                                                  from '../hooks/useStore'
 import { useFetch }                                                  from '../hooks/useFetch'
 import { inventoryApi, salesApi }                                    from '../api'
@@ -6,7 +7,8 @@ import { Icon, Modal, Toast, StockBar, useToast, fmtBRL, fmtTime }  from '../com
 import { addItem, changeQty as changeCartQty, removeItem, cartTotal, cartQty as countItems, toSaleRequest } from '../utils/cart'
 import { todayISO }                                                  from '../utils/date'
 
-export function PDV() {
+export function PDV({ onTabChange = () => {} }) {
+  const { isAdmin } = useAuth()
   const { currentStore }           = useStore()
   const storeId                    = currentStore?.id
   const { toast, show: showToast } = useToast()
@@ -85,10 +87,14 @@ export function PDV() {
                 onAdd={() => item.quantity > 0 && setModal(item)}
               />
             ))}
-            <button className="border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center p-8 text-outline hover:border-primary hover:text-primary transition-all min-h-[180px]">
-              <Icon name="add_circle" className="text-4xl mb-2" />
-              <span className="text-sm font-bold uppercase tracking-widest">Novo Item</span>
-            </button>
+            {/* Cadastrar produto é do administrador (RN02): leva aos Cadastros (antes não fazia nada — DEF-21) */}
+            {isAdmin && (
+              <button onClick={() => onTabChange('cadastros')}
+                className="border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center p-8 text-outline hover:border-primary hover:text-primary transition-all min-h-[180px]">
+                <Icon name="add_circle" className="text-4xl mb-2" />
+                <span className="text-sm font-bold uppercase tracking-widest">Novo Item</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -131,9 +137,6 @@ export function PDV() {
             <div className="pt-4 border-t border-outline-variant/20 space-y-2.5">
               <div className="flex justify-between text-on-surface-variant text-sm">
                 <span>Subtotal</span><span>{fmtBRL(total)}</span>
-              </div>
-              <div className="flex justify-between text-on-surface-variant text-sm">
-                <span>Taxa de entrega</span><span>R$ 0,00</span>
               </div>
               <div className="flex justify-between items-center pt-2">
                 <span className="font-serif text-xl">Total</span>

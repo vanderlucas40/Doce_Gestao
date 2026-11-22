@@ -4,7 +4,7 @@ import { salesApi }                                    from '../api'
 import { Icon, Card, fmtBRL, fmtTime, fmtQty }        from '../components/ui'
 import { variation }                                   from '../utils/trend'
 
-export function Dashboard() {
+export function Dashboard({ onTabChange = () => {} }) {
   const { currentStore } = useStore()
   const storeId = currentStore?.id
 
@@ -43,7 +43,7 @@ export function Dashboard() {
             {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
           </p>
         </div>
-        <button className="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-3 rounded-xl font-bold shadow-lg text-sm self-start md:self-auto hover:opacity-90 transition-opacity">
+        <button onClick={() => onTabChange('pdv')} className="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-3 rounded-xl font-bold shadow-lg text-sm self-start md:self-auto hover:opacity-90 transition-opacity">
           <Icon name="add" />
           Nova Venda
         </button>
@@ -65,7 +65,7 @@ export function Dashboard() {
           <section>
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-serif">Vendas Recentes</h3>
-              <button className="text-primary font-bold text-sm hover:underline">Ver todas</button>
+              <button onClick={() => onTabChange('relatorios')} className="text-primary font-bold text-sm hover:underline">Ver todas</button>
             </div>
             <div className="space-y-3">
               {recentSales.length === 0
@@ -98,7 +98,7 @@ export function Dashboard() {
                             {item.status === 'OUT' ? 'Esgotado' : `${fmtQty(item.quantity)} ${item.unit || 'un.'} restantes`}
                           </p>
                         </div>
-                        <button className="bg-white border border-outline-variant text-on-surface-variant px-4 py-2 rounded-lg text-xs font-bold hover:bg-surface-container-highest transition-colors whitespace-nowrap">
+                        <button onClick={() => onTabChange('estoque')} className="bg-white border border-outline-variant text-on-surface-variant px-4 py-2 rounded-lg text-xs font-bold hover:bg-surface-container-highest transition-colors whitespace-nowrap">
                           Repor
                         </button>
                       </div>

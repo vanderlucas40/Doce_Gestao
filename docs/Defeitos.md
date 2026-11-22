@@ -24,6 +24,7 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 | DEF-18 | — | RNF04, RF14 | Média | Corrigido |
 | DEF-19 | — | RNF04, RF07, RF08, RF17 | Alta | Corrigido |
 | DEF-20 | — | RNF10, RF18 | Baixa | Corrigido |
+| DEF-21 | — | RF11, RF19, RNF04 | Média | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -157,6 +158,22 @@ Todos achados na execução manual de 22/11/2026, no clone limpo, com capturas e
 | DEF-18 | Fornada a 375 px: campo de quantidade sumia e o sabor ficava cortado | Grade de 12 colunas fixa (7/3/2) em qualquer largura | Sabor em linha inteira e quantidade abaixo em telas pequenas | Manual (CT-MAN-09) |
 | DEF-19 | No celular não havia como chegar a Estoque, Relatórios e Equipe: ☰ sem ação, barra inferior com 4 itens, itens da tela Menu sem ação | Ícone ☰ decorativo; menu lateral oculto abaixo de 768 px | ☰ abre o menu lateral como gaveta (fecha ao escolher); tela Menu com atalhos reais (Estoque, Relatórios e, para admin, Cadastros e Equipe) | Manual (CT-MAN-09) |
 | DEF-20 | CSV com data “22/11” sem ano (o Excel assume o ano atual); números da busca anterior permaneciam sob a mensagem de intervalo inválido | `fmtDate` sem ano no CSV; resultado não era limpo | CSV com dd/mm/aaaa (`fmtDateFull`); intervalo inválido limpa o resultado | CT-FE-21, manual (CT-MAN-12, 14) |
+
+## DEF-21 — Elementos sem ação e dados fictícios herdados do protótipo
+
+Achado no reteste do CT-MAN-09 (captura do Estoque a 1280 px) e confirmado por varredura do código. Mesmo tipo do DEF-13: a tela mostrava algo que o sistema não faz.
+
+| Tela | Problema | Correção |
+|---|---|---|
+| Estoque | “Cronograma de Produção” com lotes inventados (Red Velvet, Lote #204…) fixos no código | Substituído por **Últimas Fornadas** reais da loja (histórico da API) |
+| Estoque | Botão “+” flutuante no celular sem ação | Removido |
+| Dashboard | “Nova Venda”, “Ver todas” e “Repor” sem ação | Levam ao PDV, aos Relatórios e ao Estoque |
+| PDV | Card “Novo Item” sem ação; linha “Taxa de entrega R$ 0,00” sem função no sistema | Card só para admin, leva aos Cadastros; linha removida |
+| Menu | Lápis sobre o avatar sem ação | Removido |
+| Equipe | Ícone “⋮” (sugere menu) desativava o usuário; admin podia desativar a si mesmo | Ícone “desativar usuário” com rótulo; sem o botão na própria linha; API responde 422 “Você não pode desativar o próprio usuário.” |
+
+- **Commit:** `fix(frontend): remove ações sem efeito e dados fictícios (DEF-21)`
+- **Teste:** CT-SEG-16 (API); reteste manual das telas.
 
 **Limitação aceita pela equipe:** a tela de login mostra sempre as credenciais de demonstração (`admin / admin123 · operador.centro / operador123`), para facilitar a avaliação. Em uso real, desligar o seed (`APP_SEED_ENABLED=false`) e trocar as senhas.
 

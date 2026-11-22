@@ -44,8 +44,8 @@ function AppShell() {
 
   // ── Mapa de páginas — adicione novas features aqui ────────
   const pages = {
-    dashboard:  <Dashboard />,
-    pdv:        <PDV />,
+    dashboard:  <Dashboard onTabChange={setTab} />,
+    pdv:        <PDV onTabChange={setTab} />,
     estoque:    <Estoque />,
     producao:   <ProducaoLote />,
     relatorios: <Relatorios />,

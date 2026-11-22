@@ -1,3 +1,4 @@
+import { useAuth } from '../hooks/useAuth'
 import { useState }                                from 'react'
 import { useStore }                                from '../hooks/useStore'
 import { useFetch }                                from '../hooks/useFetch'
@@ -6,6 +7,7 @@ import { authApi }                                 from '../api/auth'
 import { Icon, Modal, Toast, Card, useToast }      from '../components/ui'
 
 export function Users() {
+  const { session } = useAuth()
   const { stores }                         = useStore()
   const { toast, show: showToast }         = useToast()
   const { data: users, loading, error, refetch } = useFetch(() => api.get('/users').then(r => r.data), [])
@@ -96,7 +98,7 @@ export function Users() {
             </thead>
             <tbody className="divide-y divide-outline-variant/5">
               {(users || []).map(u => (
-                <UserRow key={u.id} user={u} onDeactivate={() => handleDeactivate(u.id, u.username)} />
+                <UserRow key={u.id} user={u} isSelf={u.username === session?.username} onDeactivate={() => handleDeactivate(u.id, u.username)} />
               ))}
             </tbody>
           </table>
@@ -168,7 +170,7 @@ export function Users() {
 }
 
 // ── User Row ──────────────────────────────────────────────────
-function UserRow({ user, onDeactivate }) {
+function UserRow({ user, isSelf, onDeactivate }) {
   return (
     <tr className={`hover:bg-surface-container-low/50 transition-colors ${!user.active ? 'opacity-50' : ''}`}>
       <td className="py-6">
@@ -199,9 +201,11 @@ function UserRow({ user, onDeactivate }) {
         </div>
       </td>
       <td className="py-6 text-right">
-        {user.active && (
-          <button onClick={onDeactivate} className="p-2 hover:bg-error-container/30 text-on-surface-variant hover:text-error rounded-lg transition-colors">
-            <Icon name="more_vert" className="text-xl" />
+        {/* Ícone explícito (antes "⋮" desativava direto) e sem opção de desativar a si mesmo (DEF-21) */}
+        {user.active && !isSelf && (
+          <button onClick={onDeactivate} title="Desativar usuário" aria-label={`Desativar ${user.username}`}
+            className="p-2 hover:bg-error-container/30 text-on-surface-variant hover:text-error rounded-lg transition-colors">
+            <Icon name="person_off" className="text-xl" />
           </button>
         )}
       </td>

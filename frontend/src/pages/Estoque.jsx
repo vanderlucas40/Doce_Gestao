@@ -1,8 +1,8 @@
 import { useState }                                          from 'react'
 import { useStore }                                          from '../hooks/useStore'
 import { useFetch }                                          from '../hooks/useFetch'
-import { inventoryApi }                                      from '../api'
-import { Icon, Modal, Toast, StatusBadge, StockBar, useToast, fmtBRL, fmtQty } from '../components/ui'
+import { inventoryApi, productionApi }                       from '../api'
+import { Icon, Modal, Toast, StatusBadge, StockBar, useToast, fmtBRL, fmtQty, fmtDate, fmtTime } from '../components/ui'
 
 const REASONS = ['Entrada de Produção', 'Venda Manual', 'Avaria / Perda', 'Inventário Periódico']
 
@@ -21,6 +21,7 @@ export function Estoque() {
 
   const { data: inventory,   loading: l1, refetch: r1 } = useFetch(() => inventoryApi.listByStore(storeId),   [storeId], { enabled: !!storeId })
   const { data: ingredients, loading: l2, refetch: r2 } = useFetch(() => inventoryApi.listIngredients(storeId), [storeId], { enabled: !!storeId })
+  const { data: batches } = useFetch(() => productionApi.list(storeId), [storeId], { enabled: !!storeId })
 
   function openEdit(item, type) {
     setEditItem({ ...item, _type: type })
@@ -117,25 +118,33 @@ export function Estoque() {
         }
       </div>
 
-      {/* Timeline de produção */}
+      {/* Últimas fornadas da loja (antes: cronograma fictício fixo no código — DEF-21) */}
       <section className="mt-16">
-        <h3 className="text-2xl font-serif mb-8">Cronograma de Produção</h3>
-        <div className="relative pl-8 space-y-10">
-          <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-secondary-fixed-dim" />
-          {TIMELINE.map((ev, i) => (
-            <div key={i} className={`relative ${ev.opacity}`}>
-              <div className={`absolute -left-[30px] top-1 w-5 h-5 rounded-full ${ev.dot} border-4 border-background`} />
-              <div className="flex justify-between items-start">
-                <div>
-                  <span className={`text-[10px] font-bold uppercase ${ev.color}`}>{ev.status}</span>
-                  <h4 className="text-lg font-bold text-on-surface mt-0.5">{ev.title}</h4>
-                  <p className="text-sm text-on-surface-variant">{ev.desc}</p>
+        <h3 className="text-2xl font-serif mb-8">Últimas Fornadas</h3>
+        {!(batches || []).length ? (
+          <p className="text-sm text-on-surface-variant">Nenhuma fornada registrada nesta loja.</p>
+        ) : (
+          <div className="relative pl-8 space-y-10">
+            <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-secondary-fixed-dim" />
+            {(batches || []).slice(0, 3).map(b => (
+              <div key={b.id} className="relative">
+                <div className="absolute -left-[30px] top-1 w-5 h-5 rounded-full bg-secondary border-4 border-background" />
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase text-secondary">Concluída</span>
+                    <h4 className="text-lg font-bold text-on-surface mt-0.5">Fornada #{b.id} — {b.totalItems} {b.totalItems === 1 ? 'unidade' : 'unidades'}</h4>
+                    <p className="text-sm text-on-surface-variant">
+                      {(b.items || []).map(it => `${it.productName} +${it.quantity}`).join(' · ')}
+                    </p>
+                  </div>
+                  <span className="text-xs text-on-surface-variant ml-4 whitespace-nowrap">
+                    {fmtDate(b.producedAt)} {fmtTime(b.producedAt)}
+                  </span>
                 </div>
-                <span className="text-xs text-on-surface-variant ml-4 whitespace-nowrap">{ev.time}</span>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Modal de ajuste */}
@@ -224,11 +233,6 @@ export function Estoque() {
           </div>
         </Modal>
       )}
-
-      {/* FAB mobile */}
-      <button className="fixed right-6 bottom-28 md:bottom-6 bg-gradient-to-br from-primary to-primary-container text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl shadow-primary/30 z-40 transition-transform active:scale-90 md:hidden">
-        <Icon name="add" />
-      </button>
 
       <Toast msg={toast?.msg} type={toast?.type} />
     </div>
@@ -351,9 +355,3 @@ function PageState({ spinner, icon, msg, action, actionLabel }) {
     </div>
   )
 }
-
-const TIMELINE = [
-  { status: 'Concluído',   color: 'text-secondary', dot: 'bg-secondary',         title: 'Massa Base - Red Velvet',         desc: 'Lote #204 - 12 unidades prontas.',           time: '08:30', opacity: '' },
-  { status: 'Em Produção', color: 'text-tertiary',  dot: 'bg-tertiary-container', title: 'Coberturas Cream Cheese',         desc: 'Lote #205 - Batimento final em andamento.',  time: '09:45', opacity: '' },
-  { status: 'Aguardando',  color: 'text-outline',   dot: 'bg-outline-variant',    title: 'Finalização Frutas Vermelhas',    desc: 'Aguardando resfriamento da calda.',          time: '11:15', opacity: 'opacity-60' },
-]

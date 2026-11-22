@@ -60,6 +60,11 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deactivate(@PathVariable Long id) {
         var user = getOrThrow(id);
+        // O administrador não pode se desativar: perderia o acesso e a loja poderia ficar sem admin (DEF-21)
+        var current = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        if (user.getUsername().equals(current)) {
+            throw new com.docegestao.service.BusinessException("Você não pode desativar o próprio usuário.");
+        }
         user.setActive(false);
         userRepository.save(user);
         return ResponseEntity.noContent().build();

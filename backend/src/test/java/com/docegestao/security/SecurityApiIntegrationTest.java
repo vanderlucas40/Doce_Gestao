@@ -168,6 +168,16 @@ class SecurityApiIntegrationTest extends MySqlIntegrationTest {
            .andExpect(jsonPath("$.message").value("Parâmetro inválido: storeId."));
     }
 
+    @Test
+    @DisplayName("CT-SEG-16: administrador não consegue desativar o próprio usuário (DEF-21)")
+    void adminNaoSeDesativa() throws Exception {
+        var self = userRepository.findByUsernameAndActiveTrue("admin-" + tag).orElseThrow();
+        as(admin, delete("/users/{id}", self.getId()))
+           .andExpect(status().isUnprocessableEntity())
+           .andExpect(jsonPath("$.message").value("Você não pode desativar o próprio usuário."));
+        org.assertj.core.api.Assertions.assertThat(userRepository.findById(self.getId()).orElseThrow().getActive()).isTrue();
+    }
+
     // ─── Perfis nos cadastros (RN02) ─────────────────────────
 
     @Test

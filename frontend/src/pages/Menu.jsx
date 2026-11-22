@@ -28,9 +28,6 @@ export function Menu({ onTabChange = () => {} }) {
               {session?.username?.[0]?.toUpperCase() || 'U'}
             </span>
           </div>
-          <button className="absolute bottom-0 right-0 bg-primary p-1.5 rounded-full text-white shadow-lg border-2 border-surface">
-            <Icon name="edit" className="text-sm" />
-          </button>
         </div>
 
         <div>
