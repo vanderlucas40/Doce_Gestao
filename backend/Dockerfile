@@ -9,6 +9,8 @@ RUN mvn package -DskipTests -q
 
 # ── Stage 2: runtime ─────────────────────────────────────────
 FROM eclipse-temurin:21-jre-alpine
+# curl é usado pelo healthcheck do docker-compose (a imagem alpine não o traz)
+RUN apk add --no-cache curl
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
