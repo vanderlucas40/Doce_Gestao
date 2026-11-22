@@ -526,7 +526,9 @@ function ConsolidationPanel({ preview, loading, adjustments, onAdjust, validLine
         <div>
           <p className="font-serif text-base text-on-surface mb-1">Ficha Técnica ausente</p>
           <p className="text-sm text-on-surface-variant">
-            Nenhum produto selecionado possui ficha técnica cadastrada.
+            {preview.productsWithoutRecipe?.length
+              ? <>Sem ficha técnica: <strong>{preview.productsWithoutRecipe.join(', ')}</strong>.{' '}</>
+              : 'Há sabores selecionados sem ficha técnica cadastrada. '}
             Vá em <strong>Cadastros → Ficha Técnica</strong> para configurar os ingredientes de cada sabor.
           </p>
         </div>

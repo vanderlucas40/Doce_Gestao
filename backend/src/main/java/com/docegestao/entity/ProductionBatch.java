@@ -6,8 +6,8 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Cabeçalho de uma Fornada (lote de produção).
@@ -42,11 +42,14 @@ public class ProductionBatch {
     @Column(name = "total_items", nullable = false)
     private Integer totalItems = 0;
 
+    // Set (e não List): o histórico busca items e ingredientUsages com JOIN FETCH na
+    // mesma consulta, e o Hibernate não aceita duas "bags" (MultipleBagFetchException);
+    // com List, o produto cartesiano também duplicaria os itens (DEF-07)
     @OneToMany(mappedBy = "batch", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BatchItem> items = new ArrayList<>();
+    private Set<BatchItem> items = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "batch", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BatchIngredientUsage> ingredientUsages = new ArrayList<>();
+    private Set<BatchIngredientUsage> ingredientUsages = new LinkedHashSet<>();
 
     public enum BatchStatus { PLANNED, IN_PROGRESS, COMPLETED, CANCELLED }
 }

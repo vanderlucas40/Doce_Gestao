@@ -18,7 +18,8 @@ public class FornadaPreviewResponse {
     public List<IngredientNeedResponse> ingredients;
     public int totalItems;
     public int flavors;
-    public boolean missingRecipe; // true se nenhum produto tem ficha técnica
+    public boolean missingRecipe; // true se algum produto da fornada não tem ficha técnica (RN13)
+    public List<String> productsWithoutRecipe; // nomes dos sabores sem ficha técnica
 
     @Data
     public static class IngredientNeedResponse {

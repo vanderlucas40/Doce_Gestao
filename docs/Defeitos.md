@@ -7,6 +7,10 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 | DEF-01 | R01 | RF07, RF08, RN01 | Alta | Corrigido |
 | DEF-02 | R02 | RF01, RNF01 | Média | Corrigido |
 | DEF-03 | — | RF11, RF17, RNF10 | Média | Corrigido |
+| DEF-04 | — | RF16, RN12 | Alta | Corrigido |
+| DEF-05 | — | RF14, RN13 | Média | Corrigido |
+| DEF-06 | — | RF14, RN11 | Média | Corrigido |
+| DEF-07 | — | RF20 | Alta | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -44,4 +48,34 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 - **R05:** `JWT_SECRET` sem valor padrão no código e no compose; a API falha na inicialização se o segredo faltar ou tiver menos de 32 bytes. Senhas do banco lidas do `.env`. Seed (`admin123`, `operador123`) só com `APP_SEED_ENABLED=true`.
 - **R07:** `ddl-auto=validate`; o Flyway é a única fonte do esquema.
 - MySQL publicado só em `127.0.0.1:3306`.
+
+## DEF-04 — Desvio negativo aumentava o estoque de insumo
+
+- **Sintoma:** fornada com quantidade real negativa (ex.: `-2`) somava 2 kg ao estoque de farinha; quantidade real vazia gerava HTTP 500.
+- **Causa:** `FornadaRequest.adjustments` sem `@Valid` (o `@DecimalMin("0")` de `IngredientAdjustment` era ignorado) e nenhuma validação no serviço.
+- **Correção:** `@Valid` em `adjustments`; `ProductionService` recusa desvio nulo, negativo ou de insumo fora da ficha técnica (422, mensagem em português).
+- **Testes:** CT-PRO-08, CT-PRO-09, CT-PRO-10.
+
+## DEF-05 — Fornada mista registrava sabor sem ficha técnica com consumo zero
+
+- **Sintoma:** fornada com Bolo de Cenoura (com ficha) e Brigadeiro (sem ficha) era registrada; o brigadeiro entrava no estoque sem abater insumo.
+- **Causa:** o serviço só recusava a fornada quando **nenhum** sabor tinha ficha técnica; RN13 exige o aviso para qualquer sabor sem ficha.
+- **Correção:** `register` recusa e `preview` sinaliza (`missingRecipe`, `productsWithoutRecipe`) quando algum sabor não tem ficha; a tela Fornada lista os sabores.
+- **Testes:** CT-PRO-03, CT-PRO-11, CT-PRO-12.
+
+## DEF-06 — Unidades produzidas descartadas quando o produto não tinha estoque na loja
+
+- **Sintoma:** fornada de um produto ainda sem registro de estoque naquela loja abatia os insumos, mas as unidades produzidas não apareciam no estoque.
+- **Causa:** o incremento só ocorria se o registro de `inventory` já existisse (RN11).
+- **Correção:** a fornada cria o registro de estoque do produto na loja quando ele falta.
+- **Testes:** CT-PRO-13, CT-PRO-15.
+
+## DEF-07 — Histórico de fornadas falhava ao carregar
+
+- **Sintoma:** `GET /stores/{id}/production` (histórico, RF20) com fornadas gravadas respondia erro.
+- **Causa:** a consulta faz `JOIN FETCH` de `items` e `ingredientUsages`, duas coleções `List` ("bags"); o Hibernate recusa (`MultipleBagFetchException`) e, com List, o produto cartesiano duplicaria os itens.
+- **Correção:** as duas coleções de `ProductionBatch` passam a `Set` (`LinkedHashSet`, ordem de inserção preservada); sem mudança de esquema.
+- **Segunda causa (achada pelo CT-PRO-15):** a consulta não buscava `b.store`, e `FornadaResponse.from()` lia o nome da loja fora da sessão (`LazyInitializationException`). Na API isso ficava mascarado pelo open-in-view do Spring; fora de uma requisição web (teste, tarefa agendada) falhava.
+- **Correção complementar:** `JOIN FETCH b.store` nas três consultas de fornada e `@Transactional(readOnly = true)` em `findByStore` e `findById`.
+- **Teste:** CT-PRO-15 (histórico lido do MySQL real).
 

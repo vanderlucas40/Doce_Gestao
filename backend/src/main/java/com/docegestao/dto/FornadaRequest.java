@@ -16,6 +16,7 @@ public class FornadaRequest {
     public List<BatchItemRequest> items;
 
     /** Ajustes de desvio opcionais — sobrescrevem a quantidade sugerida pela ficha técnica */
+    @Valid
     public List<IngredientAdjustment> adjustments;
 
     public String notes;

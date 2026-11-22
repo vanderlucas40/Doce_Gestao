@@ -15,6 +15,7 @@ public interface ProductionBatchRepository extends JpaRepository<ProductionBatch
 
     @Query("""
         SELECT b FROM ProductionBatch b
+        JOIN FETCH b.store
         JOIN FETCH b.items i
         JOIN FETCH i.product
         LEFT JOIN FETCH b.ingredientUsages u
@@ -26,6 +27,7 @@ public interface ProductionBatchRepository extends JpaRepository<ProductionBatch
 
     @Query("""
         SELECT b FROM ProductionBatch b
+        JOIN FETCH b.store
         JOIN FETCH b.items i
         JOIN FETCH i.product
         LEFT JOIN FETCH b.ingredientUsages u
@@ -41,6 +43,7 @@ public interface ProductionBatchRepository extends JpaRepository<ProductionBatch
 
     @Query("""
         SELECT b FROM ProductionBatch b
+        JOIN FETCH b.store
         JOIN FETCH b.items i
         JOIN FETCH i.product
         LEFT JOIN FETCH b.ingredientUsages u

@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductionService {
 
+    private static final Locale PT_BR = Locale.of("pt", "BR");
+
     private final ProductionBatchRepository   batchRepository;
     private final RecipeItemRepository        recipeItemRepository;
     private final IngredientStockRepository   ingredientStockRepository;
@@ -27,12 +29,14 @@ public class ProductionService {
 
     // ─── Histórico ───────────────────────────────────────────────
 
+    @Transactional(readOnly = true)
     public List<FornadaResponse> findByStore(Long storeId) {
         storeService.getOrThrow(storeId);
         return batchRepository.findByStoreIdWithDetails(storeId)
                 .stream().map(FornadaResponse::from).toList();
     }
 
+    @Transactional(readOnly = true)
     public FornadaResponse findById(Long storeId, Long batchId) {
         var batch = batchRepository.findByIdWithDetails(batchId)
                 .orElseThrow(() -> new ResourceNotFoundException("Fornada não encontrada: " + batchId));
@@ -44,15 +48,17 @@ public class ProductionService {
     // ─── Preview (sem gravar) ─────────────────────────────────────
 
     public FornadaPreviewResponse preview(Long storeId, List<BatchItemRequest> items) {
-        var consolidated = consolidateIngredients(items);
+        var consolidated   = consolidateIngredients(items);
+        var withoutRecipe  = productsWithoutRecipe(items);
 
-        if (consolidated.isEmpty()) {
-            // Nenhum produto tem ficha técnica — avisa o padeiro
+        if (!withoutRecipe.isEmpty()) {
+            // RN13: algum sabor sem ficha técnica — avisa o padeiro em vez de calcular consumo zero
             var preview = new FornadaPreviewResponse();
             preview.ingredients = List.of();
             preview.totalItems  = items.stream().mapToInt(i -> i.quantity).sum();
             preview.flavors     = (int) items.stream().map(i -> i.productId).distinct().count();
             preview.missingRecipe = true;
+            preview.productsWithoutRecipe = withoutRecipe;
             return preview;
         }
 
@@ -76,6 +82,7 @@ public class ProductionService {
         preview.totalItems   = items.stream().mapToInt(i -> i.quantity).sum();
         preview.flavors      = (int) items.stream().map(i -> i.productId).distinct().count();
         preview.missingRecipe = false;
+        preview.productsWithoutRecipe = List.of();
         return preview;
     }
 
@@ -87,18 +94,25 @@ public class ProductionService {
 
         var consolidated = consolidateIngredients(req.getItems());
 
-        if (consolidated.isEmpty()) {
+        // RN13: qualquer sabor sem ficha técnica impede a fornada (antes, só se TODOS estivessem sem — DEF-05)
+        var withoutRecipe = productsWithoutRecipe(req.getItems());
+        if (!withoutRecipe.isEmpty()) {
             throw new BusinessException(
-                "Nenhum dos produtos selecionados possui Ficha Técnica cadastrada. " +
-                "Cadastre os ingredientes por produto antes de registrar uma fornada."
+                "Sem Ficha Técnica cadastrada: " + String.join(", ", withoutRecipe) + ". " +
+                "Cadastre os ingredientes desses sabores antes de registrar a fornada."
             );
         }
 
-        // Ajustes de desvio
+        // RN12: ajustes de desvio — quantidade obrigatória, não negativa e só de insumos da ficha (DEF-04)
         Map<Long, BigDecimal> adjustmentMap = new HashMap<>();
         if (req.getAdjustments() != null) {
-            for (var adj : req.getAdjustments())
+            for (var adj : req.getAdjustments()) {
+                if (adj.getIngredientId() == null || adj.getActualQty() == null || adj.getActualQty().signum() < 0)
+                    throw new BusinessException("Quantidade real usada deve ser informada e não pode ser negativa.");
+                if (!consolidated.containsKey(adj.getIngredientId()))
+                    throw new BusinessException("Ajuste informado para insumo que não faz parte da ficha técnica desta fornada.");
                 adjustmentMap.put(adj.getIngredientId(), adj.getActualQty());
+            }
         }
 
         // Validação fail-fast: verifica TODOS antes de descontar qualquer um
@@ -110,8 +124,9 @@ public class ProductionService {
             var actualQty = adjustmentMap.getOrDefault(entry.getKey(), need.qty());
             var available = stockMap.getOrDefault(entry.getKey(), BigDecimal.ZERO);
             if (available.compareTo(actualQty) < 0) {
-                shortages.add("'%s': precisa %.3f %s, tem %.3f %s"
-                        .formatted(need.name(), actualQty, need.unit(), available, need.unit()));
+                // Números no formato brasileiro (RNF10), independente do locale do servidor
+                shortages.add(String.format(PT_BR, "'%s': precisa %.3f %s, tem %.3f %s",
+                        need.name(), actualQty, need.unit(), available, need.unit()));
             }
         }
 
@@ -169,11 +184,17 @@ public class ProductionService {
             batchItem.setQuantity(itemReq.getQuantity());
             batch.getItems().add(batchItem);
 
-            var inv = invByProduct.get(itemReq.getProductId());
-            if (inv != null) {
-                inv.setQuantity(inv.getQuantity() + itemReq.getQuantity());
-                inventoryRepository.save(inv);
-            }
+            // RN11: unidades produzidas sempre entram no estoque; cria o registro se a loja
+            // ainda não tinha o produto (antes eram descartadas sem aviso — DEF-06)
+            var inv = invByProduct.computeIfAbsent(itemReq.getProductId(), id -> {
+                var novo = new Inventory();
+                novo.setStore(store);
+                novo.setProduct(product);
+                novo.setQuantity(0);
+                return novo;
+            });
+            inv.setQuantity(inv.getQuantity() + itemReq.getQuantity());
+            inventoryRepository.save(inv);
         }
 
         return FornadaResponse.from(batchRepository.save(batch));
@@ -200,6 +221,17 @@ public class ProductionService {
             }
         }
         return consolidated;
+    }
+
+    /** Nomes dos produtos da fornada que não têm ficha técnica (RN13). */
+    private List<String> productsWithoutRecipe(List<BatchItemRequest> items) {
+        var productIds = items.stream().map(BatchItemRequest::getProductId).distinct().toList();
+        var withRecipe = recipeItemRepository.findByProductIds(productIds).stream()
+                .map(r -> r.getProduct().getId()).collect(Collectors.toSet());
+        return productIds.stream()
+                .filter(id -> !withRecipe.contains(id))
+                .map(id -> productService.getOrThrow(id).getName())
+                .toList();
     }
 
     private Map<Long, BigDecimal> loadIngredientStocks(Long storeId, Set<Long> ingredientIds) {
