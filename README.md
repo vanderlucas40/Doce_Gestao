@@ -34,6 +34,7 @@ cd frontend && npm install && npm run dev   # http://localhost:3000 (proxy /api 
 ## Testes
 ```bash
 cd backend && mvn test     # unitários sempre; integração (MySQL via Testcontainers) só com Docker ativo
+cd frontend && npm test    # Vitest (jsdom): cliente HTTP, sessão, carrinho do PDV
 ```
 Sem Docker, os testes de integração são ignorados e os unitários continuam rodando.
 

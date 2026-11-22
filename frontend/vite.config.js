@@ -26,4 +26,10 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: false,
   },
+  // Vitest: ambiente de navegador simulado (jsdom); arquivos *.test.js(x) em src/
+  test: {
+    environment: 'jsdom',
+    include: ['src/**/*.test.{js,jsx}'],
+    restoreMocks: true,
+  },
 })
