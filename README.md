@@ -2,6 +2,8 @@
 
 Sistema web de gestão multi-loja para confeitarias: PDV, estoque, ficha técnica e produção em lote (fornada multissabor).
 
+Repositório: https://github.com/vanderlucas40/Doce_Gestao
+
 ## Stack
 | Camada | Tecnologia |
 |---|---|
@@ -38,7 +40,7 @@ Na primeira execução o `DataInitializer` cria lojas, produtos, insumos e dois 
 ```
 backend/    API Spring Boot (controller, service, repository, entity, dto, security, config)
 frontend/   SPA React (api, components, hooks, pages)
-docs/       Artefatos das macro entregas (PDFs)
+docs/       Artefatos das macro entregas (PDFs): fase1/, fase2/
 ```
 
 ## Padrões
@@ -48,7 +50,13 @@ docs/       Artefatos das macro entregas (PDFs)
 - Commits semânticos (`feat`, `fix`, `docs`, `test`, `chore`, `refactor`); `main` só recebe código revisado.
 
 ## Documentação
-Artefatos das Fases 1 e 2 em `docs/`. Plano de testes: `TestCasePlan.md` (Fase 3).
+| Fase | Artefatos |
+|---|---|
+| 1 — Concepção e Requisitos ([docs/fase1](docs/fase1)) | 01 Documento de Visão · 02 Especificação de Requisitos · 03 Histórias de Usuário · 04 Product Backlog · 05 Plano de Utilização de IA |
+| 2 — Arquitetura e Modelagem ([docs/fase2](docs/fase2)) | 01 Documento de Arquitetura · 02 Diagramas de Modelagem · 03 Modelo de Dados · 04 Protótipos de Interface · 05 Estrutura Técnica · Planejamento e Checklist (interno) |
+| 3 — Implementação e Testes | `TestCasePlan.md` e Registro de Utilização da IA (em produção) |
+
+Os identificadores de risco (R01–R10) seguem o Documento de Arquitetura (fase 2, artefato 01).
 
 ## Equipe
 Vandemberg Lucas Lima Melo (2112090004) · Ítalo de Farias Costa (2515050012) — Professor: Jeremias Araújo.
