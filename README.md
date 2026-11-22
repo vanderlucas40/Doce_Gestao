@@ -1,5 +1,7 @@
 # Doce Gestão
 
+[![CI](https://github.com/vanderlucas40/Doce_Gestao/actions/workflows/ci.yml/badge.svg)](https://github.com/vanderlucas40/Doce_Gestao/actions/workflows/ci.yml)
+
 Sistema web de gestão multi-loja para confeitarias: PDV, estoque, ficha técnica e produção em lote (fornada multissabor).
 
 Repositório: https://github.com/vanderlucas40/Doce_Gestao
@@ -37,6 +39,8 @@ cd backend && mvn test     # unitários sempre; integração (MySQL via Testcont
 cd frontend && npm test    # Vitest (jsdom): cliente HTTP, sessão, carrinho do PDV
 ```
 Sem Docker, os testes de integração são ignorados e os unitários continuam rodando.
+
+A cada push na `main`, o GitHub Actions (`.github/workflows/ci.yml`) roda os testes do backend e do frontend, o build e um smoke test que sobe o `docker compose`, faz login e confere o 401 sem token.
 
 ## Variáveis de ambiente
 `MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRATION_MS`, `APP_SEED_ENABLED` (ver `.env.example`).
