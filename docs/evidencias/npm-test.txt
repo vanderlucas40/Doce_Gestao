@@ -10,24 +10,26 @@ No linha:1 caractere:1
     + CategoryInfo          : NotSpecified: ([33mThe CJS bu...e details.[39m:String) [], RemoteException
     + FullyQualifiedErrorId : NativeCommandError
  
-(node:40444) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of 
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mC:/Users/vande/OneDrive/Documentos/docegestao-v5-stable-completo/frontend[39m
+
+(node:31940) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of 
 file:///C:/Users/vande/OneDrive/Documentos/docegestao-v5-stable-completo/frontend/postcss.config.js is not specified 
 and it doesn't parse as CommonJS.
 Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
 To eliminate this warning, add "type": "module" to 
 C:\Users\vande\OneDrive\Documentos\docegestao-v5-stable-completo\frontend\package.json.
 (Use `node --trace-warnings ...` to show where the warning was created)
+ [32mÔ£ô[39m src/utils/cart.test.js [2m([22m[2m6 tests[22m[2m)[22m[90m 31[2mms[22m[39m
+ [32mÔ£ô[39m src/utils/trend.test.js [2m([22m[2m2 tests[22m[2m)[22m[90m 13[2mms[22m[39m
+ [32mÔ£ô[39m src/utils/date.test.js [2m([22m[2m1 test[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32mÔ£ô[39m src/components/format.test.js [2m([22m[2m2 tests[22m[2m)[22m[90m 235[2mms[22m[39m
+ [32mÔ£ô[39m src/api/client.test.js [2m([22m[2m5 tests[22m[2m)[22m[90m 95[2mms[22m[39m
+ [32mÔ£ô[39m src/hooks/useFetch.test.jsx [2m([22m[2m2 tests[22m[2m)[22m[90m 124[2mms[22m[39m
+ [32mÔ£ô[39m src/hooks/useAuth.test.jsx [2m([22m[2m5 tests[22m[2m)[22m[90m 42[2mms[22m[39m
 
-[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mC:/Users/vande/OneDrive/Documentos/docegestao-v5-stable-completo/frontend[39m
-
- [32mÔ£ô[39m src/utils/date.test.js [2m([22m[2m1 test[22m[2m)[22m[90m 6[2mms[22m[39m
- [32mÔ£ô[39m src/utils/trend.test.js [2m([22m[2m2 tests[22m[2m)[22m[90m 7[2mms[22m[39m
- [32mÔ£ô[39m src/utils/cart.test.js [2m([22m[2m6 tests[22m[2m)[22m[90m 14[2mms[22m[39m
- [32mÔ£ô[39m src/api/client.test.js [2m([22m[2m5 tests[22m[2m)[22m[90m 39[2mms[22m[39m
- [32mÔ£ô[39m src/hooks/useAuth.test.jsx [2m([22m[2m5 tests[22m[2m)[22m[90m 23[2mms[22m[39m
-
-[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
-[2m      Tests [22m [1m[32m19 passed[39m[22m[90m (19)[39m
-[2m   Start at [22m 16:23:24
-[2m   Duration [22m 6.93s[2m (transform 358ms, setup 0ms, collect 2.67s, tests 89ms, environment 21.40s, prepare 2.02s)[22m
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m23 passed[39m[22m[90m (23)[39m
+[2m   Start at [22m 17:33:17
+[2m   Duration [22m 13.70s[2m (transform 797ms, setup 0ms, collect 6.68s, tests 550ms, environment 59.69s, prepare 3.73s)[22m
 
