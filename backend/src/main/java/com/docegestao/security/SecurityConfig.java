@@ -26,12 +26,17 @@ public class SecurityConfig {
 
     private final JwtAuthFilter       jwtAuthFilter;
     private final UserDetailsServiceImpl userDetailsService;
+    private final JsonSecurityHandlers   securityHandlers;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // 401 para não autenticado, 403 para perfil insuficiente, ambos em JSON (DEF-02)
+            .exceptionHandling(e -> e
+                .authenticationEntryPoint(securityHandlers.entryPoint())
+                .accessDeniedHandler(securityHandlers.accessDeniedHandler()))
             .authorizeHttpRequests(auth -> auth
 
                 // ── Rotas públicas ──────────────────────────────────

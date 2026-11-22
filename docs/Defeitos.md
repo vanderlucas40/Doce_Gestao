@@ -5,6 +5,7 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 | ID | Risco | Requisito | Severidade | Status |
 |---|---|---|---|---|
 | DEF-01 | R01 | RF07, RF08, RN01 | Alta | Corrigido |
+| DEF-02 | R02 | RF01, RNF01 | Média | Corrigido |
 
 ## DEF-01 — Operador não consegue ajustar estoque da própria loja
 
@@ -15,3 +16,16 @@ Defeitos encontrados e corrigidos na Fase 3. Os IDs de risco (R01–R10) seguem 
 - **Correção:** padrão trocado para `/stores/*` (PUT e DELETE), que casa só `/stores/{id}`. Editar e desativar lojas continua exclusivo do ADMIN (RN02); o isolamento por loja nas sub-rotas segue a cargo do `StoreAccessGuard`.
 - **Commit:** `fix(security): operador ajusta estoque da própria loja`
 - **Teste de regressão:** previsto no Step 8 (MockMvc): operador → `PUT /stores/{sua loja}/inventory/{id}` = 200; `PUT /stores/{outra loja}/inventory/{id}` = negado; `PUT /stores/{id}` = 403.
+
+## DEF-02 — Sessão expirada não volta ao login (403 no lugar de 401)
+
+- **Sintoma:** com o token expirado, as telas mostram "Access Denied" ou erros genéricos em vez de redirecionar ao login. Usuário desativado com token ainda válido recebia HTTP 500.
+- **Reprodução:** login → aguardar a expiração do token (ou alterar o token no `localStorage`) → navegar. Equivale a `GET /api/stores/1/inventory` sem token ou com token inválido.
+- **Esperado:** HTTP 401 com mensagem em português; o frontend limpa a sessão e volta ao login (RF01, RNF01).
+- **Causa:** sem `AuthenticationEntryPoint`, o Spring Security usa o `Http403ForbiddenEntryPoint` e responde 403 sem corpo; o interceptor do Axios só redireciona em 401. No `JwtAuthFilter`, a `UsernameNotFoundException` de usuário desativado não era tratada.
+- **Correção:**
+  - `JsonSecurityHandlers`: entry point 401 e access-denied 403, ambos em JSON no contrato do `GlobalExceptionHandler`.
+  - `JwtAuthFilter`: marca token rejeitado (malformado, expirado, de usuário desativado) para a mensagem "Sessão expirada"; usuário desativado passa a gerar 401.
+  - `client.js`: o redirecionamento em 401 ignora as rotas `/auth/*`, evitando recarregar a tela de login em loop.
+- **Commit:** `fix(security): 401 para token ausente ou expirado`
+- **Teste de regressão:** previsto no Step 8 (MockMvc): sem token = 401; token inválido = 401 com "Sessão expirada"; operador em rota ADMIN = 403; e no Step 11 (Vitest): 401 limpa o token e redireciona, exceto em `/auth/login`.

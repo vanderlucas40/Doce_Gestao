@@ -36,11 +36,13 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(
   response => response,
   error => {
-    // 401 → sessão expirada ou inválida
-    if (error.response?.status === 401) {
+    // 401 → token ausente, expirado ou de usuário desativado (o backend responde 401 desde DEF-02).
+    // Rotas /auth/* ficam de fora para não recarregar a tela de login em loop.
+    const isAuthCall = error.config?.url?.startsWith('/auth/')
+    if (error.response?.status === 401 && !isAuthCall) {
       clearToken()
       window.location.href = '/'
-      return Promise.reject(new Error('Sessão expirada. Redirecionando...'))
+      return Promise.reject(new Error(error.response?.data?.message || 'Sessão expirada. Redirecionando...'))
     }
 
     const data = error.response?.data

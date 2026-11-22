@@ -9,6 +9,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -42,20 +43,31 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             username = jwtService.extractUsername(token);
         } catch (Exception e) {
-            // Token malformado ou expirado — continua sem autenticar
+            // Token malformado ou expirado — continua sem autenticar; o entry point responde 401
+            JsonSecurityHandlers.markInvalidToken(request);
             filterChain.doFilter(request, response);
             return;
         }
 
         // Usuário ainda não autenticado no contexto desta request
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails;
+            try {
+                userDetails = userDetailsService.loadUserByUsername(username);
+            } catch (UsernameNotFoundException e) {
+                // Usuário desativado ou removido depois de emitido o token → 401, não 500
+                JsonSecurityHandlers.markInvalidToken(request);
+                filterChain.doFilter(request, response);
+                return;
+            }
 
             if (jwtService.isValid(token, userDetails)) {
                 var authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                JsonSecurityHandlers.markInvalidToken(request);
             }
         }
 
