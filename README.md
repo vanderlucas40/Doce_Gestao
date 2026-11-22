@@ -31,6 +31,12 @@ cd frontend && npm install && npm run dev   # http://localhost:3000 (proxy /api 
 | API (contexto /api) | 8080 |
 | MySQL | 3306 |
 
+## Testes
+```bash
+cd backend && mvn test     # unitários sempre; integração (MySQL via Testcontainers) só com Docker ativo
+```
+Sem Docker, os testes de integração são ignorados e os unitários continuam rodando.
+
 ## Variáveis de ambiente
 `MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRATION_MS`, `APP_SEED_ENABLED` (ver `.env.example`).
 
